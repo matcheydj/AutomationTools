@@ -1,0 +1,670 @@
+<?xml version="1.0"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHSA-2016-0185" Revision="3" CVE_ID="CVE-2015-5157,CVE-2015-7872">
+  <Status>Deleted</Status>
+  <Groups />
+  <DependsOn />
+  <Patches>
+    <Patch UniqueFilename="*kernel-3.10.0-327.10.1.el7.x86_64.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>kernel-3.10.0-327.10.1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>kernel::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>bef1a8fd818ffee12dbbe62dcdcac9dc</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33144</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk kernel  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*kernel-abi-whitelists-3.10.0-327.10.1.el7.noarch.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>kernel-abi-whitelists-3.10.0-327.10.1.el7.noarch.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>kernel-abi-whitelists::noarch</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>472153098dd74c913306add23c5510a0</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33145</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk kernel-abi-whitelists  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*kernel-debug-3.10.0-327.10.1.el7.x86_64.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>kernel-debug-3.10.0-327.10.1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>kernel-debug::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>6c1232bd7140a3ffb15a9a89d3671bb2</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33146</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk kernel-debug  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*kernel-debug-debuginfo-3.10.0-327.10.1.el7.x86_64.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>kernel-debug-debuginfo-3.10.0-327.10.1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>kernel-debug-debuginfo::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>8677b3cfffe6863086153f0891d29725</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33147</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk kernel-debug-debuginfo  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*kernel-debug-devel-3.10.0-327.10.1.el7.x86_64.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>kernel-debug-devel-3.10.0-327.10.1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>kernel-debug-devel::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>0d9f8b4d7ef509db3bac1a1acc168d94</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33148</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk kernel-debug-devel  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*kernel-debuginfo-3.10.0-327.10.1.el7.x86_64.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>kernel-debuginfo-3.10.0-327.10.1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>kernel-debuginfo::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>69bf28784c712bb6457c98b4afeddca1</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33149</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk kernel-debuginfo  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*kernel-debuginfo-common-x86_64-3.10.0-327.10.1.el7.x86_64.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>kernel-debuginfo-common-x86_64-3.10.0-327.10.1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>kernel-debuginfo-common-x86_64::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>5a53d0f4210b4afe5a6ae4de44e7b2e8</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33150</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk kernel-debuginfo-common-x86_64  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*kernel-devel-3.10.0-327.10.1.el7.x86_64.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>kernel-devel-3.10.0-327.10.1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>kernel-devel::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>ce66503397794cd525a8dd2a86a78901</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33151</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk kernel-devel  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*kernel-doc-3.10.0-327.10.1.el7.noarch.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>kernel-doc-3.10.0-327.10.1.el7.noarch.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>kernel-doc::noarch</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>5ea89838c56fd8fa57933fe1a8875243</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33152</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk kernel-doc  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*kernel-headers-3.10.0-327.10.1.el7.x86_64.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>kernel-headers-3.10.0-327.10.1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>kernel-headers::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>c08d07da805d4a3871a7c417af39720e</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33153</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk kernel-headers  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*kernel-tools-3.10.0-327.10.1.el7.x86_64.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>kernel-tools-3.10.0-327.10.1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>kernel-tools::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>4438f88d14af3057e37f91ef23f4a44f</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33154</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk kernel-tools  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*kernel-tools-debuginfo-3.10.0-327.10.1.el7.x86_64.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>kernel-tools-debuginfo-3.10.0-327.10.1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>kernel-tools-debuginfo::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>543150fe4e237fed101d5956020f6a66</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33155</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk kernel-tools-debuginfo  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*kernel-tools-libs-3.10.0-327.10.1.el7.x86_64.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>kernel-tools-libs-3.10.0-327.10.1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>kernel-tools-libs::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>1d8481db2479f1ec1f7a8d6e847af4b9</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33156</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk kernel-tools-libs  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*kernel-tools-libs-devel-3.10.0-327.10.1.el7.x86_64.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>kernel-tools-libs-devel-3.10.0-327.10.1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>kernel-tools-libs-devel::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>2977383f0338b3b47eb343399e23faca</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33157</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk kernel-tools-libs-devel  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*perf-3.10.0-327.10.1.el7.x86_64.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>perf-3.10.0-327.10.1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>perf::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>ada521d6e2da2ab4c111862b5ac713fd</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33158</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk perf  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*perf-debuginfo-3.10.0-327.10.1.el7.x86_64.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>perf-debuginfo-3.10.0-327.10.1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>perf-debuginfo::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>d6790707c529eb46254ee26517cd61eb</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33159</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk perf-debuginfo  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*python-perf-3.10.0-327.10.1.el7.x86_64.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>python-perf-3.10.0-327.10.1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>python-perf::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>71179e68581f351c01b325aa61333510</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33160</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk python-perf  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*python-perf-debuginfo-3.10.0-327.10.1.el7.x86_64.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>python-perf-debuginfo-3.10.0-327.10.1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>python-perf-debuginfo::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>cfc2c1f88dee8f75efafe64dd534acd8</Checksum>
+          <Version>3.10.0-327.10.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33161</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk python-perf-debuginfo  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+  </Patches>
+  <PublishDate>2016-02-16T00:00:00.0000000+00:00</PublishDate>
+  <Title>Important: kernel security and bug fix update</Title>
+  <Description>Updated kernel packages that fix two security issues and several bugs are 
+ now available for Red Hat Enterprise Linux 7. 
+ 
+ Red Hat Product Security has rated this update as having Important security 
+ impact. Common Vulnerability Scoring System (CVSS) base scores, which give 
+ detailed severity ratings, are available for each vulnerability from the 
+ CVE links in the References section. 
+ The kernel packages contain the Linux kernel, the core of any Linux 
+ operating system. 
+ 
+ * It was found that the Linux kernel's keys subsystem did not correctly 
+ garbage collect uninstantiated keyrings. A local attacker could use this 
+ flaw to crash the system or, potentially, escalate their privileges on the 
+ system. (CVE-2015-7872, Important) 
+ 
+ * A flaw was found in the way the Linux kernel handled IRET faults during 
+ the processing of NMIs. An unprivileged, local user could use this flaw to 
+ crash the system or, potentially (although highly unlikely), escalate their 
+ privileges on the system. (CVE-2015-5157, Moderate) 
+ 
+ This update also fixes the following bugs: 
+ 
+ * Previously, processing packets with a lot of different IPv6 source 
+ addresses caused the kernel to return warnings concerning soft-lockups due 
+ to high lock contention and latency increase. With this update, lock 
+ contention is reduced by backing off concurrent waiting threads on the 
+ lock. As a result, the kernel no longer issues warnings in the described 
+ scenario. (BZ#1285370) 
+ 
+ * Prior to this update, block device readahead was artificially limited. 
+ As a consequence, the read performance was poor, especially on RAID 
+ devices. Now, per-device readahead limits are used for each device instead 
+ of a global limit. As a result, read performance has improved, especially 
+ on RAID devices. (BZ#1287550) 
+ 
+ * After injecting an EEH error, the host was previously not recovering and 
+ observing I/O hangs in HTX tool logs. This update makes sure that when one 
+ or both of EEH_STATE_MMIO_ACTIVE and EEH_STATE_MMIO_ENABLED flags is marked 
+ in the PE state, the PE's IO path is regarded as enabled as well. As a 
+ result, the host no longer hangs and recovers as expected. (BZ#1289101) 
+ 
+ * The genwqe device driver was previously using the GFP_ATOMIC flag for 
+ allocating consecutive memory pages from the kernel's atomic memory pool, 
+ even in non-atomic situations. This could lead to allocation failures 
+ during memory pressure. With this update, the genwqe driver's memory 
+ allocations use the GFP_KERNEL flag, and the driver can allocate memory 
+ even during memory pressure situations. (BZ#1289450) 
+ 
+ * The nx842 co-processor for IBM Power Systems could in some circumstances 
+ provide invalid data due to a data corruption bug during uncompression. 
+ With this update, all compression and uncompression calls to the nx842 
+ co-processor contain a cyclic redundancy check (CRC) flag, which forces all 
+ compression and uncompression operations to check data integrity and 
+ prevents the co-processor from providing corrupted data. (BZ#1289451) 
+ 
+ * A failed "updatepp" operation on the little-endian variant of IBM Power 
+ Systems could previously cause a wrong hash value to be used for the next 
+ hash insert operation in the page table. This could result in a missing 
+ hash pte update or invalidate operation, potentially causing memory 
+ corruption. With this update, the hash value is always recalculated after a 
+ failed "updatepp" operation, avoiding memory corruption. (BZ#1289452) 
+ 
+ * Large Receive Offload (LRO) flag disabling was not being propagated 
+ downwards from above devices in vlan and bond hierarchy, breaking the flow 
+ of traffic. This problem has been fixed and LRO flags now propagate 
+ correctly. (BZ#1292072) 
+ 
+ * Due to rounding errors in the CPU frequency of the intel_pstate driver, 
+ the CPU frequency never reached the value requested by the user. A kernel 
+ patch has been applied to fix these rounding errors. (BZ#1296276) 
+ 
+ * When running several containers (up to 100), reports of hung tasks were 
+ previously reported. This update fixes the AB-BA deadlock in the 
+ dm_destroy() function, and the hung reports no longer occur. (BZ#1296566) 
+ 
+ All kernel users are advised to upgrade to these updated packages, which 
+ contain backported patches to correct these issues. The system must be 
+ rebooted for this update to take effect. 
+ 
+ Note for remediation: Please disable the SELinux for RHEL 4/5 when repairing, or some rpm packages will fail to install.</Description>
+  <Severity>2</Severity>
+  <Vendor>Redhat</Vendor>
+  <MoreInfoURL>https://rhn.redhat.com/errata/RHSA-2016-0185.html</MoreInfoURL>
+  <FAQURL />
+</Vulnerability>

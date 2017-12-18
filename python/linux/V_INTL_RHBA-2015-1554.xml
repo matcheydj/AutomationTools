@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHBA-2015-1554" Revision="1" CVE_ID="CVE-2015-3230">
+  <Status>Enabled</Status>
+  <Patches>
+    <Patch UniqueFilename="*389-ds-base-1.3.3.1-20.el7_1.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>389-ds-base-1.3.3.1-20.el7_1.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>389-ds-base::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>2cd71521ceb2f877b481b19b3580629e94707f91119681bdad218a0a68a060d2</Checksum>
+          <Version>1.3.3.1-20.el7_1</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>21267</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk 389-ds-base  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*389-ds-base-debuginfo-1.3.3.1-20.el7_1.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>389-ds-base-debuginfo-1.3.3.1-20.el7_1.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>389-ds-base-debuginfo::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>b78d8d9551bf52874887c6921cc5d34258b12fa76f694ed580a3ed99238d2a8e</Checksum>
+          <Version>1.3.3.1-20.el7_1</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>21268</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk 389-ds-base-debuginfo  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*389-ds-base-devel-1.3.3.1-20.el7_1.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>389-ds-base-devel-1.3.3.1-20.el7_1.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>389-ds-base-devel::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>06317c3a3e5103a04b61a547eafec0f5f37342ec20ffa6041f35cc876155d837</Checksum>
+          <Version>1.3.3.1-20.el7_1</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>21269</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk 389-ds-base-devel  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*389-ds-base-libs-1.3.3.1-20.el7_1.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>389-ds-base-libs-1.3.3.1-20.el7_1.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>389-ds-base-libs::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>5639cb05dc4e0eff69aff328955cee5bfd7c70773dff527acfc14ddf792c12b7</Checksum>
+          <Version>1.3.3.1-20.el7_1</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>21270</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk 389-ds-base-libs  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-08-05T00:00:00.0000000</PublishDate>
+  <Title>389-ds-base bug fix update</Title>
+  <Description>
+        
+The 389 Directory Server is an LDAPv3 compliant server. The base packages
+include the LDAP server and command-line utilities for server administration. 
+This update fixes the following bugs:
+ Previously, the code of search requests for asynchronous simple paged
+results was not thread-safe, which created a small window during which a
+conflict could occur in the simple paged result slot. As a consequence, the
+server could terminate unexpectedly. To fix this bug, the code is now
+thread-safe, and the crash no longer occurs in this situation. 
+In addition, abandoning simple paged results request was previously not handled
+correctly if an abandon request was issued too quickly. Consequently, an
+internal search result object was in some cases not released. With this update,
+the search result request is safely released regardless of the timing of the
+abandon request. (BZ#1230037)
+ Prior to this update, a helper function to check whether the cache size is
+valid or not was resetting the cash size to a very small value. Consequently,
+the helper function was applied and the Distinguished Name (DN) cache was
+applied at the server start-up timing, which reduced the cache size. With this
+update, the helper function provides only the validity check and no longer
+resets the cache size. As a result, the entry and DN cache sizes do not get
+affected by the helper function. (BZ#1230038)
+ Previously, when AD users had multiple spaces inside the value of the RDN
+attribute, synchronizing the entry to the Directory Server failed. The
+underlying source code has been fixed, and Windows Synchronization (WinSync)
+plug-in in the Directory Server now works as expected. (BZ#1243718) 
+Users of 389-ds-base are advised to upgrade to these updated packages, which fix
+these bugs. After installing this update, the 389 server service will be
+restarted automatically.
+        Note for remediation: Please disable the SELinux for RHEL 4/5 when repairing, or some rpm packages will fail to install.</Description>
+  <Severity>5</Severity>
+  <Vendor>Redhat</Vendor>
+  <MoreInfoURL>https://access.redhat.com/errata/RHBA-2015:1554</MoreInfoURL>
+  <FAQURL />
+</Vulnerability>

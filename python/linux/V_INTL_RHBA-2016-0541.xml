@@ -1,0 +1,236 @@
+<?xml version="1.0"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHBA-2016-0541" Revision="1" CVE_ID="">
+  <Status>Enabled</Status>
+  <Patches>
+    <Patch UniqueFilename="*fence-sanlock-3.2.4-2.el7_2.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>fence-sanlock-3.2.4-2.el7_2.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>fence-sanlock::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>58c19849d9babb3e07c4746be8a595b46e887a07f2ea76249d7c3f48a5f7fe62</Checksum>
+          <Version>3.2.4-2.el7_2</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>44501</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk fence-sanlock  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*sanlk-reset-3.2.4-2.el7_2.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>sanlk-reset-3.2.4-2.el7_2.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>sanlk-reset::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>b7c7fd8bd9d2c1aae600fed2c70d0b13384d733c0bc395bdec910f7e398acdb8</Checksum>
+          <Version>3.2.4-2.el7_2</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>44502</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk sanlk-reset  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*sanlock-3.2.4-2.el7_2.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>sanlock-3.2.4-2.el7_2.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>sanlock::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>0693926f43374ab7c01ec101fa1cb05f57d2292df44e6d4d952b2260c5ddbf68</Checksum>
+          <Version>3.2.4-2.el7_2</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>44503</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk sanlock  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*sanlock-debuginfo-3.2.4-2.el7_2.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>sanlock-debuginfo-3.2.4-2.el7_2.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>sanlock-debuginfo::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>ca7c05af993b534ce2c7d38be0613678976e40a7a22c1c54dd92f8f4d1e50ebe</Checksum>
+          <Version>3.2.4-2.el7_2</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>44504</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk sanlock-debuginfo  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*sanlock-devel-3.2.4-2.el7_2.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>sanlock-devel-3.2.4-2.el7_2.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>sanlock-devel::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>47459b8bc643e001f995b6bcc4100e8fb6013c77ceca082f5303ff95626de3b9</Checksum>
+          <Version>3.2.4-2.el7_2</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>44505</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk sanlock-devel  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*sanlock-lib-3.2.4-2.el7_2.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>sanlock-lib-3.2.4-2.el7_2.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>sanlock-lib::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>212d6041d2646af14f2ca8396a467bdf3546ab9f692e914bcc5882621f1b429c</Checksum>
+          <Version>3.2.4-2.el7_2</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>44506</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk sanlock-lib  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*sanlock-python-3.2.4-2.el7_2.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>sanlock-python-3.2.4-2.el7_2.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>sanlock-python::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>34e056afd29edef6bec568cb73d7e3ebb2283b35051a613ca704003ba9041a33</Checksum>
+          <Version>3.2.4-2.el7_2</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>44507</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk sanlock-python  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+  </Patches>
+  <PublishDate>2016-03-31T00:00:00.0000000</PublishDate>
+  <Title>sanlock bug fix update</Title>
+  <Description>
+        
+The sanlock packages provide a shared storage lock manager. Hosts with shared access to a block device or a file can use sanlock to synchronize their activities. VDSM and libvirt use sanlock to synchronize access to shared devices or files.
+This update fixes the following bug:
+ Due to a bug, when the wdmd service attempted to restart, it disabled the watchdog device on the system, which prevented the watchdog from resetting the system if the wdmd service failed before. With this update, vdmd no longer fails to start in the described situation. (BZ#1287131)
+Users of sanlock are advised to upgrade to these updated packages, which fix this bug.
+        Note for remediation: Please disable the SELinux for RHEL 4/5 when repairing, or some rpm packages will fail to install.</Description>
+  <Severity>5</Severity>
+  <Vendor>Redhat</Vendor>
+  <MoreInfoURL>https://access.redhat.com/errata/RHBA-2016:0541</MoreInfoURL>
+  <FAQURL />
+</Vulnerability>

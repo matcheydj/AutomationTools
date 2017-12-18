@@ -1,0 +1,852 @@
+<?xml version="1.0"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHSA-2016-1781" Revision="2" CVE_ID="CVE-2016-5423,CVE-2016-5424">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Red Hat Software Collections 1 for RHEL 6</Group>
+    <Group>Red Hat Software Collections 1 for RHEL 7</Group>
+  </Groups>
+  <Patches>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-9.4.9-1.el6.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-9.4.9-1.el6.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>982e66eac5063928808f0104bc3a6fe3</Checksum>
+          <Version>9.4.9-1.el6</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38725</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel6_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-9.4.9-1.el7.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-9.4.9-1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>ccc7e891ad35ab1323f852dcbad44cd3</Checksum>
+          <Version>9.4.9-1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38725</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-contrib-9.4.9-1.el6.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-contrib-9.4.9-1.el6.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-contrib::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>5e82ae2ddea762312cc8f82268f974ba</Checksum>
+          <Version>9.4.9-1.el6</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38726</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel6_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-contrib  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-contrib-9.4.9-1.el7.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-contrib-9.4.9-1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-contrib::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>ede8fb52c5108c0fca2e55039b5d7faf</Checksum>
+          <Version>9.4.9-1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38726</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-contrib  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-debuginfo-9.4.9-1.el6.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-debuginfo-9.4.9-1.el6.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-debuginfo::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>4317aaff87f1801940c877ed44a5f65d</Checksum>
+          <Version>9.4.9-1.el6</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38727</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel6_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-debuginfo  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-debuginfo-9.4.9-1.el7.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-debuginfo-9.4.9-1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-debuginfo::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>a1b2a20a0f6d4fed4681880abbcdb526</Checksum>
+          <Version>9.4.9-1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38727</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-debuginfo  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-devel-9.4.9-1.el6.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-devel-9.4.9-1.el6.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-devel::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>13499ddbd02c0a6b8e154936bf84ae43</Checksum>
+          <Version>9.4.9-1.el6</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38728</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel6_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-devel  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-devel-9.4.9-1.el7.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-devel-9.4.9-1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-devel::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>1d001bada6dbb0ce8ec368c78658faf7</Checksum>
+          <Version>9.4.9-1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38728</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-devel  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-docs-9.4.9-1.el6.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-docs-9.4.9-1.el6.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-docs::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>f84f1bb0fb91a89e99713336f0171698</Checksum>
+          <Version>9.4.9-1.el6</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38729</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel6_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-docs  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-docs-9.4.9-1.el7.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-docs-9.4.9-1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-docs::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>ac2d67b781f45e34b509241639c38cae</Checksum>
+          <Version>9.4.9-1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38729</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-docs  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-libs-9.4.9-1.el6.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-libs-9.4.9-1.el6.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-libs::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>75336a9a2f20bc7c80d91d1a0ca2e1bc</Checksum>
+          <Version>9.4.9-1.el6</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38730</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel6_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-libs  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-libs-9.4.9-1.el7.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-libs-9.4.9-1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-libs::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>6ffe344144a2855be2be5392970a7b17</Checksum>
+          <Version>9.4.9-1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38730</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-libs  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-plperl-9.4.9-1.el6.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-plperl-9.4.9-1.el6.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-plperl::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>ded994d5bcc43ffd041b8592512555a6</Checksum>
+          <Version>9.4.9-1.el6</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38731</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel6_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-plperl  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-plperl-9.4.9-1.el7.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-plperl-9.4.9-1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-plperl::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>5125d57a5c992f9baf2c76feb7f4c96e</Checksum>
+          <Version>9.4.9-1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38731</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-plperl  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-plpython-9.4.9-1.el6.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-plpython-9.4.9-1.el6.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-plpython::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>efbc55a56544574d0fe191bad0b2a90f</Checksum>
+          <Version>9.4.9-1.el6</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38732</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel6_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-plpython  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-plpython-9.4.9-1.el7.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-plpython-9.4.9-1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-plpython::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>c8de9e00fdbf650efc7b03e4a37feb98</Checksum>
+          <Version>9.4.9-1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38732</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-plpython  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-pltcl-9.4.9-1.el6.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-pltcl-9.4.9-1.el6.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-pltcl::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>e8bc1d905a693d53a01104bcb728c377</Checksum>
+          <Version>9.4.9-1.el6</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38733</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel6_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-pltcl  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-pltcl-9.4.9-1.el7.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-pltcl-9.4.9-1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-pltcl::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>5f1c15947622c99e6a1fb1991af7325b</Checksum>
+          <Version>9.4.9-1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38733</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-pltcl  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-server-9.4.9-1.el6.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-server-9.4.9-1.el6.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-server::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>c5a146cf28d0ca997a66bac084790491</Checksum>
+          <Version>9.4.9-1.el6</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38734</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel6_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-server  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-server-9.4.9-1.el7.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-server-9.4.9-1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-server::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>78b337d85c3515745cc6a8247726a79a</Checksum>
+          <Version>9.4.9-1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38734</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-server  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-static-9.4.9-1.el6.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-static-9.4.9-1.el6.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-static::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>25b5db9179cd6711ee3370783fdb5ed9</Checksum>
+          <Version>9.4.9-1.el6</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>42313</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel6_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-static  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-static-9.4.9-1.el7.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-static-9.4.9-1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-static::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>cb3e596c35072b39734b297a09251458</Checksum>
+          <Version>9.4.9-1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>42313</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-static  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-test-9.4.9-1.el6.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-test-9.4.9-1.el6.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-test::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>16eddfd91063d4496eeb8629c399b545</Checksum>
+          <Version>9.4.9-1.el6</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38735</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel6_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-test  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-test-9.4.9-1.el7.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-test-9.4.9-1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-test::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>cabbef1b32d8583923a99715be3b928f</Checksum>
+          <Version>9.4.9-1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38735</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-test  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-upgrade-9.4.9-1.el6.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-upgrade-9.4.9-1.el6.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-upgrade::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>d776087af756fc6f04009ac110272678</Checksum>
+          <Version>9.4.9-1.el6</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38736</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel6_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-upgrade  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+    <Patch UniqueFilename="*rh-postgresql94-postgresql-upgrade-9.4.9-1.el7.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>rh-postgresql94-postgresql-upgrade-9.4.9-1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>rh-postgresql94-postgresql-upgrade::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>faf8aadc5f0bd7920e99aed91a4fe8ad</Checksum>
+          <Version>9.4.9-1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>38736</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk rh-postgresql94-postgresql-upgrade  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+  </Patches>
+  <PublishDate>2016-08-31T00:00:00.0000000</PublishDate>
+  <Title>Moderate: rh-postgresql94-postgresql security update</Title>
+  <Description>An update for rh-postgresql94-postgresql is now available for Red Hat Software 
+ Collections. 
+ 
+ Red Hat Product Security has rated this update as having a security impact of 
+ Moderate. A Common Vulnerability Scoring System (CVSS) base score, which gives a 
+ detailed severity rating, is available for each vulnerability from the CVE 
+ link(s) in the References section. 
+ PostgreSQL is an advanced object-relational database management system (DBMS). 
+ 
+ The following packages have been upgraded to a newer upstream version: 
+ rh-postgresql94-postgresql (9.4.9) 
+ 
+ Security Fix(es): 
+ 
+ * A flaw was found in the way PostgreSQL server handled certain SQL statements 
+ containing CASE/WHEN commands. A remote, authenticated attacker could use a 
+ specially crafted SQL statement to cause PostgreSQL to crash or disclose a few 
+ bytes of server memory or possibly execute arbitrary code. (CVE-2016-5423) 
+ 
+ * A flaw was found in the way PostgreSQL client programs handled database and 
+ role names containing newlines, carriage returns, double quotes, or backslashes. 
+ By crafting such an object name, roles with the CREATEDB or CREATEROLE option 
+ could escalate their privileges to superuser when a superuser next executes 
+ maintenance with a vulnerable client program. (CVE-2016-5424) 
+ 
+ Red Hat would like to thank the PostgreSQL project for reporting these issues. 
+ Upstream acknowledges Heikki Linnakangas as the original reporter of 
+ CVE-2016-5423; and Nathan Bossart as the original reporter of CVE-2016-5424. 
+ 
+ Note for remediation: Please disable the SELinux for RHEL 4/5 when repairing, or some rpm packages will fail to install.</Description>
+  <Severity>3</Severity>
+  <Vendor>Redhat</Vendor>
+  <MoreInfoURL>https://rhn.redhat.com/errata/RHSA-2016-1781.html</MoreInfoURL>
+  <FAQURL />
+</Vulnerability>

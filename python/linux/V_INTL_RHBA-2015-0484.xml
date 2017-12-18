@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHBA-2015-0484" Revision="1" CVE_ID="">
+  <Status>Enabled</Status>
+  <Patches>
+    <Patch UniqueFilename="*redhat-upgrade-tool-0.9.1-1.el7.noarch.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>redhat-upgrade-tool-0.9.1-1.el7.noarch.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>redhat-upgrade-tool::noarch</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>28ff88662f3fa52562b845796a0362d14c75b6aa95ba56136ee4f1bcb7ce8e64</Checksum>
+          <Version>0.9.1-1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>45526</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk redhat-upgrade-tool  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-03-05T00:00:00.0000000</PublishDate>
+  <Title>redhat-upgrade-tool bug fix and enhancement update</Title>
+  <Description>
+        
+The Red Hat Upgrade Tool is used for performing an in-place upgrade of your current system to the next major version of Red Hat Enterprise Linux. It determines what packages are needed for the upgrade and gathers them from the source or sources given. It also fetches and sets up the boot images needed to run the upgrade and sets up the system to perform the upgrade on the next system boot. Running the Red Hat Upgrade Tool requires running the Preupgrade Assistant as a prerequisite.
+This update fixes the following bugs:
+ Due to a problem with the way the system upgrade boot entry was named in Red Hat Upgrade Tool, the boot entry was previously not removed from the kernel after the system was upgraded. This problem has been fixed and system upgrade boot entry is now removed as expected. (BZ#1084143)
+ Because there is no default mirror list file in Red Hat Enterprise Linux, using the Red Hat Upgrade Tool for network upgrades previously failed with a traceback error if no mirror list was specified. With this update, the "--instrepo" option is required when the "redhat-upgrade-tool --network" command is used, and the described network upgrade failure thus no longer occurs. (BZ#1084151)
+In addition, this update adds the following enhancements:
+ The "cleanup-post" option has been added for the Red Hat Upgrade Tool. This allows users to clean up old packages after upgrading from Red Hat Enterprise Linux 6 to Red Hat Enterprise Linux 7. (BZ#1084155)
+ This update modifies the error message displayed if downloading content with the Red Hat Upgrade Tool fails due to a network timeout, in order to make it more comprehensible and helpful for users. (BZ#1084156)
+ With this update, the postupgrade.d scripts of the Preupgrade Assistant tool have access to the repository used for the in-place upgrade package download, which allows for more efficient file clean-up after upgrading the system with Red Hat Upgrade Tool. (BZ#1084164)
+Users of redhat-upgrade-tool are advised to upgrade to this updated package, which fixes these bugs and adds these enhancements.
+        Note for remediation: Please disable the SELinux for RHEL 4/5 when repairing, or some rpm packages will fail to install.</Description>
+  <Severity>5</Severity>
+  <Vendor>Redhat</Vendor>
+  <MoreInfoURL>https://access.redhat.com/errata/RHBA-2015:0484</MoreInfoURL>
+  <FAQURL />
+</Vulnerability>

@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHBA-2016-2988" Revision="1" CVE_ID="">
+  <Status>Enabled</Status>
+  <Patches>
+    <Patch UniqueFilename="*python-neutronclient-3.1.0-2.el7ost.noarch.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>python-neutronclient-3.1.0-2.el7ost.noarch.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>python-neutronclient::noarch</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>68d71a7c233d541f3401661d89eeef0e89b91c6fb3b3adda4948c5924d06a721</Checksum>
+          <Version>3.1.0-2.el7ost</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>54023</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk python-neutronclient  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+  </Patches>
+  <PublishDate>2016-12-21T00:00:00.0000000</PublishDate>
+  <Title>openstack-neutron bug fix advisory</Title>
+  <Description>
+        
+Red Hat OpenStack Platform provides the facilities for building a private
+or public infrastructure-as-a-service (IaaS) cloud running on commonly
+available physical hardware. This advisory includes packages for:
+ OpenStack Networking service
+OpenStack Networking (neutron) is a virtual network service for OpenStack.
+Just as OpenStack Compute (nova) provides an API to dynamically request and
+configure virtual servers, OpenStack Networking provides an API to
+dynamically request and configure virtual networks. These networks connect
+'interfaces' from other OpenStack services (e.g. virtual NICs from Compute
+VMs).  The OpenStack Networking API supports extensions to provide advanced
+network capabilities (e.g. QoS, ACLs, network monitoring, etc.)
+This update addresses the following issues:
+ The ip_gre kernel module introduces two new interfaces to every network namespace; with Red Hat Enterprise Linux 7.3, the ip_gre kernel module is a dependency of the vport_gre module used by the Open vSwitch module. Consequently, these two devices can not be removed from the namespace, while neutron-netns-cleanup only removes the namespace if it does not contain any network interface. The presence of those devices causes the namespace removal to be skipped.
+With this update, the two new interfaces added by ip_gre will be ignored, similar to how the loopback interface does not block removal.
+As a result, the namespace is considered empty if it contains loopback and GRE interfaces, and will be cleaned up even if includes these interfaces. (BZ#1382721)
+ Previously, during port scaling, the ML2 plugin Nexus MD Driver threads closed the connections before other threads were completed.
+Consequently, the Nexus limit of 8 connections was exceeded.
+This update adds locks to threads, to prevent the thread from interfering with another thread's operations. (BZ#1376080)
+        Note for remediation: Please disable the SELinux for RHEL 4/5 when repairing, or some rpm packages will fail to install.</Description>
+  <Severity>5</Severity>
+  <Vendor>Redhat</Vendor>
+  <MoreInfoURL>https://access.redhat.com/errata/RHBA-2016:2988</MoreInfoURL>
+  <FAQURL />
+</Vulnerability>

@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHSA-2015-0102" Revision="5" CVE_ID="CVE-2014-4171,CVE-2014-5471,CVE-2014-5472,CVE-2014-7145,CVE-2014-7822,CVE-2014-7841">
+  <Status>Deleted</Status>
+  <Groups />
+  <DependsOn />
+  <Patches>
+    <Patch UniqueFilename="*kernel-doc-3.10.0-123.20.1.el7.noarch.rpm" Hash="" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>kernel-doc-3.10.0-123.20.1.el7.noarch.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>kernel-doc::noarch</Path>
+          <FileDate>0001-01-01T00:00:00.0000000+00:00</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>60a9a2750cd40c8c38e876a757ba60a2</Checksum>
+          <Version>3.10.0-123.20.1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <RegKeys />
+      <Products>
+        <ID>33152</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk kernel-doc  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-01-28T00:00:00.0000000+00:00</PublishDate>
+  <Title>Important: kernel security and bug fix update</Title>
+  <Description>Updated kernel packages that fix multiple security issues and several bugs 
+ are now available for Red Hat Enterprise Linux 7. 
+ 
+ Red Hat Product Security has rated this update as having Important security 
+ impact. Common Vulnerability Scoring System (CVSS) base scores, which give 
+ detailed severity ratings, are available for each vulnerability from the 
+ CVE links in the References section. 
+ The kernel packages contain the Linux kernel, the core of any Linux 
+ operating system. 
+ 
+ * A flaw was found in the way the Linux kernel's SCTP implementation 
+ validated INIT chunks when performing Address Configuration Change 
+ (ASCONF). A remote attacker could use this flaw to crash the system by 
+ sending a specially crafted SCTP packet to trigger a NULL pointer 
+ dereference on the system. (CVE-2014-7841, Important) 
+ 
+ * A race condition flaw was found in the way the Linux kernel's mmap(2), 
+ madvise(2), and fallocate(2) system calls interacted with each other while 
+ operating on virtual memory file system files. A local user could use this 
+ flaw to cause a denial of service. (CVE-2014-4171, Moderate) 
+ 
+ * A NULL pointer dereference flaw was found in the way the Linux kernel's 
+ Common Internet File System (CIFS) implementation handled mounting of file 
+ system shares. A remote attacker could use this flaw to crash a client 
+ system that would mount a file system share from a malicious server. 
+ (CVE-2014-7145, Moderate) 
+ 
+ * A flaw was found in the way the Linux kernel's splice() system call 
+ validated its parameters. On certain file systems, a local, unprivileged 
+ user could use this flaw to write past the maximum file size, and thus 
+ crash the system. (CVE-2014-7822, Moderate) 
+ 
+ * It was found that the parse_rock_ridge_inode_internal() function of the 
+ Linux kernel's ISOFS implementation did not correctly check relocated 
+ directories when processing Rock Ridge child link (CL) tags. An attacker 
+ with physical access to the system could use a specially crafted ISO image 
+ to crash the system or, potentially, escalate their privileges on the 
+ system. (CVE-2014-5471, CVE-2014-5472, Low) 
+ 
+ Red Hat would like to thank Akira Fujita of NEC for reporting the 
+ CVE-2014-7822 issue. The CVE-2014-7841 issue was discovered by Liu Wei of 
+ Red Hat. 
+ 
+ This update also fixes the following bugs: 
+ 
+ * Previously, a kernel panic could occur if a process reading from a locked 
+ NFS file was killed and the lock was not released properly before the read 
+ operations finished. Consequently, the system crashed. The code handling 
+ file locks has been fixed, and instead of halting, the system now emits a 
+ warning about the unreleased lock. (BZ#1172266) 
+ 
+ * A race condition in the command abort handling logic of the ipr device 
+ driver could cause the kernel to panic when the driver received a response 
+ to an abort command prior to receiving other responses to the aborted 
+ command due to the support for multiple interrupts. With this update, the 
+ abort handler waits for the aborted command's responses first before 
+ completing an abort operation. (BZ#1162734) 
+ 
+ * Previously, a race condition could occur when changing a Page Table Entry 
+ (PTE) or a Page Middle Directory (PMD) to "pte_numa" or "pmd_numa", 
+ respectively, causing the kernel to crash. This update removes the BUG_ON() 
+ macro from the __handle_mm_fault() function, preventing the kernel panic in 
+ the aforementioned scenario. (BZ#1170662) 
+ 
+ All kernel users are advised to upgrade to these updated packages, which 
+ contain backported patches to correct these issues. The system must be 
+ rebooted for this update to take effect. 
+ 
+ Note for remediation: Please disable the SELinux for RHEL 4/5 when repairing, or some rpm packages will fail to install.</Description>
+  <Severity>2</Severity>
+  <Vendor>Redhat</Vendor>
+  <MoreInfoURL>https://rhn.redhat.com/errata/RHSA-2015-0102.html</MoreInfoURL>
+  <FAQURL />
+</Vulnerability>

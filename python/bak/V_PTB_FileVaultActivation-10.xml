@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<Vulnerability xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Lang="PTB" Vul_ID="FileVaultActivation-10" Revision="64">
+  <Status>Enabled</Status>
+  <Groups />
+  <DependsOn />
+  <Patches>
+    <Patch UniqueFilename="*FileVaultActivation-10_detect and remediate disabled FileVault" Hash="" Sha1="" Silent="CRSNo" Reboot="RNo" Download="DManual" Size="0">
+      <Name>detect and remediate disabled FileVault</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+/usr/bin/fdesetup isactive
+
+if [ $?  -ne 0 ]; then
+  echo "Found: Unencrypted drive"
+  echo "Reason: FileVault not active"
+  echo "Expected: FileVault active"
+  echo "Detected:1"
+else
+  echo "Detected:0"
+fi
+</DetectScript>
+      </Advanced>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files />
+      <AdditionalFiles />
+      <RegKeys />
+      <Products />
+      <Platforms>
+        <ID>macosx</ID>
+        <ID>macosxserver</ID>
+      </Platforms>
+      <Processes />
+      <UninstallInfo>
+        <canBeUninstalled>false</canBeUninstalled>
+        <requiresOriginalPatch>false</requiresOriginalPatch>
+        <Files />
+        <RegKeys />
+        <Cmds />
+      </UninstallInfo>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="ShellScript">
+          <Args>
+            <Arg N="ScriptCode" V="#!/bin/bash &#xD;&#xA;echo `/bin/date` &quot;enabling FileVault with defer option&quot;&#xD;&#xA;&#xD;&#xA;recoveryHD=&quot;NO&quot;&#xD;&#xA;&#xD;&#xA;coreStorage=&quot;NO&quot; &#xD;&#xA;atLeastYosemite=&quot;NO&quot;&#xD;&#xA;atLeast10103=&quot;NO&quot; &#xD;&#xA;systemMajorVersion=`sw_vers | grep &quot;ProductVersion:&quot; | cut -d ':' -f 2 | cut -d '.' -f 2` &#xD;&#xA;systemMinorVersion=`sw_vers | grep &quot;ProductVersion:&quot; | cut -d ':' -f 2 | cut -d '.' -f 3`&#xD;&#xA;if [ $systemMajorVersion -eq 10 ]; then &#xD;&#xA;atLeastYosemite=&quot;YES&quot;&#xD;&#xA;if [ $systemMinorVersion -ge 3 ]; then&#xD;&#xA;atLeast10103=&quot;YES&quot; &#xD;&#xA;fi &#xD;&#xA;elif [ $systemMajorVersion -gt 10 ]; then &#xD;&#xA;atLeastYosemite=&quot;YES&quot;&#xD;&#xA;atLeast10103=&quot;YES&quot; &#xD;&#xA;fi&#xD;&#xA;deferFile=`diskutil info / | grep &quot;Volume Name:&quot; | cut -d ':' -f 2 | sed -e 's/^ *//' -e 's/ *$//'`&#xD;&#xA;diskutil cs info /&#xD;&#xA;if [ $?  -eq 0 ]; then&#xD;&#xA;coreStorage=&quot;YES&quot; &#xD;&#xA;echo &quot;CoreStorage&quot; &#xD;&#xA;fi&#xD;&#xA;diskutil list | grep &quot;Recovery HD&quot;&#xD;&#xA;if [ $?  -eq 0 ]; then&#xD;&#xA;recoveryHD=&quot;YES&quot; &#xD;&#xA;echo &quot;Recovery HD&quot; &#xD;&#xA;fi &#xD;&#xA;echo &quot;CoreStorage = &quot; $coreStorage &#xD;&#xA;echo &quot;Recovery HD = &quot; $recoveryHD&#xD;&#xA;if [ &quot;$coreStorage&quot; == &quot;NO&quot; ]; then&#xD;&#xA;if [ &quot;$recoveryHD&quot; == &quot;NO&quot; ]; then &#xD;&#xA;echo `/bin/date` &quot;Boot Volume is not a CoreStorage Volume, and there is no Recovery HD, so FileVault cannot be enabled.&quot; &#xD;&#xA;/Library/Application\ Support/LANDesk/bin/ldnotify -m &quot;O LANDESK LDMS não pode habilitar o FileVault para o volume $deferFile neste dispositivo pelo fato de o $deferFile não ser um volume de armazenamento de núcleo e não haver nenhum HD de recuperação.&quot; -y &quot;OK&quot; -p &quot;O FileVault não foi habilitado&quot; &#xD;&#xA;&#xD;&#xA;exit 1 &#xD;&#xA;fi &#xD;&#xA;fi&#xD;&#xA;deferFile=`diskutil info / | grep &quot;Volume Name:&quot; | cut -d ':' -f 2 | sed -e 's/^ *//' -e 's/ *$//'`&#xD;&#xA;if [ &quot;$atLeast10103&quot; == &quot;YES&quot; ]; then&#xD;&#xA;sudo fdesetup enable -defer &quot;/Library/Application Support/LANDesk/data/$deferFile-fv2recovery.plist&quot;  -dontaskatlogout -forceatlogin 0 &#xD;&#xA;else&#xD;&#xA;&#xD;&#xA;sudo fdesetup enable -defer &quot;/Library/Application Support/LANDesk/data/$deferFile-fv2recovery.plist&quot; &#xD;&#xA;fi&#xD;&#xA;if [ $?  -ne 0 ]; then &#xD;&#xA;echo `/bin/date` &quot;fdesetup enable -defer failed&quot; &#xD;&#xA;exit 1 &#xD;&#xA;else&#xD;&#xA; &#xD;&#xA;echo `/bin/date` &quot;setting up submit to core of the FileVauilt2RecoveryKey&quot;&#xD;&#xA;sudo /Library/Application\ Support/LANDesk/bin/ldsubmitclientdata -dataname=&quot;FileVauilt2RecoveryKey&quot; -d -retry=20 -datafile=&quot;/Library/Application Support/LANDesk/data/$deferFile-fv2recovery.plist&quot; &#xD;&#xA;/Library/Application\ Support/LANDesk/bin/ldnotify -m &quot;O LANDESK LDMS não pode habilitar o FileVault para o volume $deferFile neste dispositivo. Reinicie este dispositivo o mais rápido possível para concluir o processo.&quot; -y &quot;OK&quot; -p &quot;O FileVaul foi habilitado&quot; &#xD;&#xA;exit 0 &#xD;&#xA;fi " />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+  </Patches>
+  <AssociatedProducts />
+  <IAVAs />
+  <PublishDate>2015-08-25T00:00:00.0000000</PublishDate>
+  <Title>FileVault Activation version 1.1</Title>
+  <Description>Conteúdo básico de detecção e reparo para gerenciar o FileVault em dispositivos de cliente Mac OS X com o agente LDMS instalado.
+
+O controle de dispositivo exigido neste processo é feito por meio da ferramenta da linha de comando fdesetup. Para obter informações sobre o fdesetup e todas as suas opções, consulte a página principal.Para obter informações sobre o uso, consulte a internet.Uma ótima primeira fonte para obter mais informações é o excelente blog de gerenciamento Mac do Rich Trouton.Uma introdução pode ser encontrada em &lt;https://derflounder.wordpress.com/2015/02/02/managing-yosemites-filevault-2-with-fdesetup/&gt;
+
+Detecção:
+
+Um script bash é usado para determinar o status do FileVault no dispositivo.
+
+Reparo:
+
+Um script bash é usado para habilitar o FileVault e executar uma ferramenta ldms, ldsubmitclientdata, para enviar com segurança a chave de recuperação para o servidor LANDESK, onde ela é armazenada em uma tabela segura. Porque a tabela é independente do inventário, os registro não são removidos quando um dispositivo é removido do inventário.
+
+O fdesetup para habilitar -defer é chamado, que (com as opções que selecionamos neste conteúdo) força o usuário a concluir o processo no próximo login. Com a opção de adiamento, o fdesetup não falha até o usuário tentar concluir o processo. Portanto, o script tenta ser esperto e detecta os modos de falha mais comuns antecipadamente.
+
+Para habilitar o FileVault em um dispositivo, um dos itens a seguir deve ser verdadeiro: o volume de inicialização é um volume CoreStorage ou um HD de recuperação deve existir.O script garante que pelo menos um deles seja verdadeiro e falhe se ambos forem falsos.
+
+A ferramenta LANDESK ldnotify é usada para fornecer informações de usuário.
+
+Os parâmetros ldsubmitclientdata são dataname (para o banco de dados núcleo, que não deve ser alterado), datafile, que é o caminho completo para o arquivo da chave de recuperação (deve corresponder ao parâmetro -defer para fdesetup), e retry, número de vezes que o ldsubmitclientdata tentará enviar a chave de recuperação para o servidor-núcleo. O arquivo de recuperação não será excluído do dispositivo gerenciado até que tenha sido enviado com sucesso para o núcleo.</Description>
+  <Severity>5</Severity>
+  <Vendor>Ivanti</Vendor>
+  <MoreInfoURL />
+  <FAQURL />
+  <Type>Configuration</Type>
+</Vulnerability>

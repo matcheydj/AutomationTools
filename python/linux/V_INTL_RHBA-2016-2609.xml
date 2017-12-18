@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHBA-2016-2609" Revision="2" CVE_ID="">
+  <Status>Enabled</Status>
+  <Patches>
+    <Patch UniqueFilename="*virtio-win-1.9.0-3.el7.noarch.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>virtio-win-1.9.0-3.el7.noarch.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>virtio-win::noarch</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>b7c1752202cb0d20a01ae94992d9f667</Checksum>
+          <Version>1.9.0-3.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>32525</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk virtio-win  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+  </Patches>
+  <PublishDate>2016-11-03T00:00:00.0000000</PublishDate>
+  <Title>virtio-win bug fix and enhancement update</Title>
+  <Description>An updated virtio-win package that fixes two bugs and adds various enhancements 
+ is now available for the Supplementary channel of Red Hat Enterprise Linux 7. 
+ The virtio-win package provides paravirtualized network drivers for most 
+ Microsoft Windows operating systems. Paravirtualized drivers are 
+ virtualization-aware drivers used by fully virtualized guests running on Red Hat 
+ Enterprise Linux. Fully virtualized guests using the paravirtualized drivers 
+ gain significantly better I/O performance than fully virtualized guests running 
+ without the drivers. 
+ 
+ This update fixes the following bugs: 
+ 
+ * Previously, it was possible to install incorrect versions of virtio drivers, 
+ especially when running an older Windows operating system. This sometimes caused 
+ the guest to terminate unexpectedly with a stop error, also known as the "Blue 
+ Screen of Death", if the particular driver and Windows versions were 
+ incompatible. This update adds target OS version information to driver files, 
+ which enables Windows to automatically select the best driver when pointed to 
+ the root of the virtio-win CD image. Installing an incompatible driver version 
+ manually is also no longer possible, as Windows now presents the user with an 
+ error message if installation is attempted. (BZ#1325078) 
+ 
+ * Prior to this update, the IOCTL_GET_INFORMATION I/O control call did not 
+ return the actual size of the data if the size of the passed buffer was not 
+ large enough. As a consequence, applications such as vioser-test were not able 
+ to query file size. This update introduces updated IOCTL_GET_INFORMATION I/O 
+ control code, which fixes the bug. Note that the previous I/O control code is 
+ still supported for backward compatibility, and is now named 
+ IOCTL_GET_INFORMATION_BUFFERED in the source files. (BZ#1293249) 
+ 
+ In addition, this update adds the following enhancements: 
+ 
+ * This update introduces the receive segment coalescing (RSC) feature for the 
+ virtio-net driver. This allows the driver to report coalesced transmission 
+ control protocol (TCP) segments to the OS. Note that the support for RSC is 
+ included in virtio-net for Windows Server 2012 and later versions. (BZ#950611, 
+ BZ#1340571) 
+ 
+ * The vioscsi.sys file is now compatible with Microsoft Cluster Services, which 
+ enables the Windows virtio-scsi driver to support Windows Server Failover 
+ Clustering (WSFC) using shared storage. As a result, vioscsi.sys can pass all 
+ tests in the "Validate a Configuration" process. (BZ#1219841) 
+ 
+ * The virtio-win package now contains the updated Windows 10 drivers in the 
+ virtual floppy drive (VFD) files, and the driver thus does not have to be 
+ downloaded manually. (BZ#1328275) 
+ 
+ * This update adds support for version 1.0 of the virtio protocol to the 
+ following drivers: 
+ 
+ - virtio-rng 
+ - virtio-balloon 
+ - virtio-serial 
+ - virtio-net 
+ - virtio-scsi 
+ - virtio-block 
+ 
+ Improvements in virtio 1.0 include better resource utilization and better 
+ performance. Note that if the virtual device supports virtio 1.0 as well as the 
+ older protocol (referred to as virtio 0.9.5, 0.9, or legacy), the drivers will 
+ use virtio 1.0. (BZ#1315985, BZ#1315984, BZ#1304041, BZ#1303988, BZ#1304044, 
+ BZ#1304049) 
+ 
+ * In addition to supporting single-queue mode, the vioscsi driver is now fully 
+ functional in multi-queue mode. (BZ#1210166) 
+ 
+ * The virtio-win package now contains drivers for Windows Server 2016. A new 
+ directory has been added to the drivers directory hierarchy to reflect this 
+ change. The Windows Server 2016 drivers can be found in the 
+ /usr/share/virtio-win/drivers/amd64/Win2016 file, and they have also been added 
+ to the VFD and ISO files. (BZ#1293249) 
+ 
+ * This update implements the "guest-get-vcpus" command in the Windows guest 
+ agent. "guest-get-vcpus" returns the list of virtual CPUs known to the guest 
+ operating system. (BZ#1257511) 
+ 
+ Users of virtio-win are advised to upgrade to this updated package, which fixes 
+ these bugs and adds these enhancements. 
+ 
+ Note for remediation: Please disable the SELinux for RHEL 4/5 when repairing, or some rpm packages will fail to install.</Description>
+  <Severity>5</Severity>
+  <Vendor>Redhat</Vendor>
+  <MoreInfoURL>https://rhn.redhat.com/errata/RHBA-2016-2609.html</MoreInfoURL>
+  <FAQURL />
+</Vulnerability>

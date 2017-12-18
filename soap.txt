@@ -1,0 +1,27 @@
+use strict;
+use warnings;
+use SOAP::Lite;
+use Data::Dumper;
+
+my
+$soap=SOAP::Lite->uri('http://tempuri.org')->on_action(sub {join
+'/','http://tempuri.org',$_[1]})->proxy('http://172.29.150.24/wsvulnerabilitycore/vulcore.asmx');
+#print Dumper($soap);
+my $method = SOAP::Data->name('GetVulnerabilitiesForPlatformAndLanguage')->attr({xmlns =>'http://tempuri.org/'});
+my @paras=(SOAP::Data->name(platform=>"rhel6"),SOAP::Data->name(language=>"intl"),SOAP::Data->name(lastUpdated=>0));
+my $som=$soap->call($method=>@paras);
+#print $soap->call($method=>@paras)->dataof("//vulnerability/[2]")->attr->{"Vul_ID"};
+#print $results->{"vulnerabilities"}->{"vulnerability"}->{"Vul_ID"};
+#print Dumper($response->dataof("//vulnerabilities/vulnerability"));
+foreach my $v ($som->dataof("//vulnerabilities/vulnerability")){
+
+#        print  $v->{"Patches"}->{"Patch"}->{"Advanced"}{"DetectScript"};
+        print $v->attr->{"Vul_ID"};
+	print "\n";
+}
+#while($soap->call($method=>@paras)->dataof("//vulnerabilities/*")){
+#
+#        print  $_;
+#	sleep 5;
+#	print "\n";
+#}

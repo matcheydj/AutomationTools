@@ -1,0 +1,482 @@
+#!/usr/bin/perl -w
+#given an input file of species names, prints the same number of lines to an output file or to stdout, 
+#with the following tab-separated fields on each line
+#      1. an EoL image URL to help downloading the image (or blank if no appropriate image found)
+#      2. the EoL "dataObjectID", which can serve as a unique filename (or blank if no appropriate image found)
+#      3. the EoL "pageID", which can serve as a unique filename (or blank if no appropriate image found)
+#      4. original search term used from input file 
+#      5. found taxon name 
+#      6. vernacular name (english) 
+#      7. IUCN status 
+#      8. EoL spp url
+#      9. image vettedStatus 
+#      10. short credit line 
+#      11. HTML credit line 
+#      12+. long credit line(s) (each line separated by a new tab)
+
+#Use this script as, e.g. > ./species2eolpics.pl specieslist.txt OutputFile
+#You can then download the images using the URL printed on the first field of the output file
+#by using a program such as "curl".
+#
+# e.g. to save the file with the dataObjectID as a filename
+#   perl -ne '@n=split("\t"); print "-o $n[1].$2\nurl=\"$1\"\n" if ($n[0] =~ /^(.+?\.(\w+))$/)' OutputFile | curl -K -
+# or with the species page ID as the filename
+#   perl -ne '@n=split("\t"); print "-o $n[2].$2\nurl=\"$1\"\n" if ($n[0] =~ /^(.+?\.(\w+))$/)' OutputFile | curl -K -
+# or with the vernacular name as a prefix:
+#   perl -ne '@n=split("\t"); $n[5] =~ s/\W/_/g; print "-o $n[5]-$n[1].$2\nurl=\"$1\"\n" if ($n[0] =~ /^(.+?\.(\w+))$/)' OutputFile | curl -K -
+use strict;
+use warnings;
+use Encode;
+use URI::Escape;
+use HTML::Entities;
+use HTML::TagFilter;
+use LWP::Simple;
+use JSON -support_by_pp;
+use Data::Dumper;
+## Default settings ##
+my $APIkey="YOUR_OWN_API_KEY_HERE"; #replace with your own API key.
+my $vernacularLANG = 'en';
+my $searchbase ="http://eol.org/api/search/1.0.json"; #see http://eol.org/api/docs/search
+my %search_params = (
+  key   => $APIkey,
+  page  => 1,
+  filter_by_taxon_concept_id=>"", # CHANGE THIS DEPENDING ON THE SPECIES YOU ARE USING
+  # Will only look for species which are descendants of this node ID (e.g. for placental mammals 
+  # use filter_by_taxon_concept_id=>"2844801" , see http://eol.org/pages/2844801/overview
+);
+
+my $pagesbase = "http://eol.org/api/pages/1.0/"; #see http://eol.org/api/docs/pages
+my %pages_params = (
+  key   => $APIkey,
+  images     => 10,     # only look through the first 10 images
+  videos     => 0,
+  text       => 0,
+  licenses   =>'pd|cc-by', #change this to get images with other licences
+  iucn       => 'true',
+  common_names=>'true',
+  details    => 'true',
+  vetted     => 0, #If 'vetted' is given a value of '1', then only trusted content will be returned. If 'vetted' is '2', then only trusted and unreviewed content will be returned (untrusted content will not be returned). The default (0) is to return all content.
+);
+
+my $CC_buttons_base = "/images/"; #to load the buttons only once, save the CC buttons (http://creativecommons.org/about/downloads) to your own server, in this directory
+my %CCimages = (
+  'by'=>$CC_buttons_base."cc-by-80x15.png", #only require attribution
+  'by-sa' => $CC_buttons_base."cc-by-sa-80x15.png", #require share-alike
+  'by-nc' => $CC_buttons_base."cc-by-nc-80x15.png", #require share-alike
+  'by-nc-sa' => $CC_buttons_base."cc-by-nc-sa-80x15.png",
+  'publicdomain' => $CC_buttons_base."cc-by-nc-sa-80x15.png", #EOL doesn't http://creativecommons.org/publicdomain/zero/1.0/
+);
+  
+#delete the following 5 lines if you want to use CC buttons stored on your server (recommended)
+$CCimages{'by'} = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPCAIAAAD8q9/YAAAABGdBTUEAANbY1E9YMgAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAISSURBVHjaYmAYYYARiP///z9SfMvIyAJhrdm0Glliz669M6fO7OjoKC8vx9Tm6up66tSptu5WcQlxIFdeVsHVyfXjh4+D3LeQeGXClHj54uXyxctx+RYIdu/ebWZmNrl/CoT74eOHwoLCoRLJWDy8fMkKYWFhXL6FAGBw3Lxxc8PajUD2x08fPHw8vH28h6qHL128lJ6eDmScPXtWWVkZmO6Bafj9+/dAEsgGigDFjY2NXVxcrl29BjWFiQnIRUs/EICcnDDZA+/hSxcvf/70GegfIDssLAzIALoPSHZ2dgL9+e7dO2DM37t3DygLFLxz+w48VQMTOWYJAQQQ78EZQBLIHkQe/vrlC5AUFBQERinQYxCfAxMwkK2kpAQUT0tLCw0NhRXxUKf//PmDkYURs5BA9h7EzwPrWywe5ubhAZJA3wL9BvQhMFYhxTKQC/QzULyiomLWrFloiZOdneP/n/94Ynjw5mE9fV1eXl6IP4ERu2fPHqCjgT4HsoGxLSQkBBSBZNczZ84oKitCdAnwCwArKvwxPLgaHsj1cF9X//Onz+/fv49HGzBETExMouOiA4L9gVxZabnmhuatW7YO8noYGPpYSunouKi3b98AoxSP5rKyMhVVZYhv+fkEdmzZMch9i69aArafUjNTKysr29vbsepxcna6fv16QUkBPD33T+gfbUsP0rb0SOssMQAEGAB0zfzj5yHE/QAAAABJRU5ErkJggg==';
+$CCimages{'by-sa'} = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPCAIAAAD8q9/YAAAABGdBTUEAANbY1E9YMgAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAIySURBVHjaYmAYYYARiP///z9SfMvIyAJhrdm0Glliz669M6fO7OjoKC8vx9Tm6up66tSptu5WcQlxIFdeVsHVyfXjh4+D3LeQeGXClHj54uXyxctx+RYIdu/ebWZmNrl/CoT74eOHwoLCoRLJWDy8fMkKYWFhXL6FAGBw3Lxxc8PajUD2x08fPHw8vH28h6qHL128lJ6eDmScPXtWWVkZmO6Bafj9+/dAEsgGigDFjY2NXVxcrl29BjWFiQnIRUs/EICcnDDZ+LXQonBhwvDt5c+fPgP9A2SHhYUBGUBbgWRnZyfQn+/evQPG/L1794CyQME7t+/AUzUwkWOWEEAAcTScASSBbKy+ZYQBZC7V/Yzu4a9fvgBJQUFBYJQCPQbxOTABA9lKSkpA8bS0tNDQUFgRD3X6z58/GFkYscYY3HsQ18O5aPEJkUVLCPSIYW4eHiAJ9C3Qb0AfAmMVUiwDuUA/A8UrKipmzZqFljjZ2Tn+//mPJ4ax1hDw+MSqHk2WVh7W09fl5eWF+BMYsXv27AHaCvQ5kA2MbSEhIaAIJLueOXNGUVkRokuAXwBYUeGPYYJ1BknqKW14INfDfV39z58+v3//Ph5twBAxMTGJjosOCPYHcmWl5Zobmrdu2TrI62FgaGIppaPjot6+fQOMUjyay8rKVFSVIb7l5xPYsWXHIPctvmoJ2H5KzUytrKxsb2/HqsfJ2en69esFJQXw9Nw/oX+0LT1I29IjrbPEABBgAEdwNeO7yfOaAAAAAElFTkSuQmCC';
+$CCimages{'by-nc'} = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPCAIAAAD8q9/YAAAABGdBTUEAANbY1E9YMgAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAIySURBVHjaYmAYYYARiP///z9SfAsEEA+v2bQaWWLPrr0zp87s6OgoLy/H1Obq6nrq1Km27lZxCXEgV15WwdXJ9eOHj4Pct0BvAv3LhCnx8sXL5YuX4/ItEOzevdvMzGxy/xQI98PHD4UFhUMlkrF4ePmSFcLCwrh8CwHA4Lh54+aGtRuB7I+fPnj4eHj7eA9VD1+6eCk9PR3IOHv2rLKyMjAZANPw+/fvgSSQDRQBihsbG7u4uFy7eg1qChMTkIuWfiAAzkWWwpreMNnIJtDKw5cuXv786TPQP0B2WFgYkAG0Ekh2dnYC/fnu3TtgzN+7dw8oCxS8c/sOPFUDEzmWEoKREeJiOAOSkXDlMcwsB9dIKw9//fIFSAoKCgKjFOgxiM+BCRjIVlJSAoqnpaWFhobCinio03/+/MHIwojpAWTvQZwO56IlAeRAwQw4GnqYm4cHSAJ9C/Qb0IfAWIUUy0Au0M9A8YqKilmzZqHFCTs7x/8///HEMPYagpERzTNY1dM2hvX0dXl5eSH+BEbsnj17gI4A+hzIBsa2kJAQUASSXc+cOaOorAjRJcAvAKyo8Mcw8VUlsufJMIGohgdyPdzX1f/86fP79+/j0QYMERMTk+i46IBgfyBXVlquuaF565atQ7Iejo6Levv2DTBK8WguKytTUVWG+JafT2DHlh2D3Lf4qiVg+yk1M7WysrK9vR2rHidnp+vXrxeUFMDTc/+E/tG29CBtS4+0zhIDQIABALCdLOPlj1pIAAAAAElFTkSuQmCC';
+$CCimages{'by-nc-sa'} = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPCAIAAAD8q9/YAAAABGdBTUEAANbY1E9YMgAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJLSURBVHjaYmAYYYARiP///z9SfAsEEA+v2bQaWWLPrr0zp87s6OgoLy/H1Obq6nrq1Km27lZxCXEgV15WwdXJ9eOHj4Pct0BvAv3LhCnx8sXL5YuX4/ItEOzevdvMzGxy/xQI98PHD4UFhUMlkrF4ePmSFcLCwrh8CwHA4Lh54+aGtRuB7I+fPnj4eHj7eA9VD1+6eCk9PR3IOHv2rLKyMjAZANPw+/fvgSSQDRQBihsbG7u4uFy7eg1qChMTkIuWfiAAzkWWwpreMNnIJuBKpWi2ECyPmDB8e/nzp89A/wDZYWFhQAbQCCDZ2dkJ9Oe7d++AMX/v3j2gLFDwzu078FQNTORYSghGRogL4AxIRsLleswsB9eIK09CADHqsXv465cvQFJQUBAYpUCPQXwOTMBAtpKSElA8LS0tNDQUVsRDnf7z5w9GFkaswQ/3HsQpcC5a5CAHCmbAYdUCUY+WNEiOYW4eHiAJ9C3Qb0AfAmMVUiwDuUA/A8UrKipmzZqFFifs7Bz///zHE8PYawhY5OD3M7IP0bSgWYFpIGEP6+nr8vLyQvwJjNg9e/YAjQD6HMgGxraQkBBQBJJdz5w5o6isCNElwC8ArKjwxzDxVSVaBOLJAmRYgaUe7uvqf/70+f379/FoA4aIiYlJdFx0QLA/kCsrLdfc0Lx1y9YhWQ9Hx0W9ffsGGKV4NJeVlamoKkN8y88nsGPLjkHuW3zVErD9lJqZWllZ2d7ejlWPk7PT9evXC0oK4Om5f0L/aFt6kLalR1pniQEgwAAqmGXUQtYz7AAAAABJRU5ErkJggg==';
+$CCimages{'publicdomain'} = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAPCAMAAABEF7i9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADNQTFRFv7+/39/fYGBgEBAQ7+/vICAgMDAwQEBAz8/PUFBQn5+fgICAcHBwj4+Pr6+v////AAAAAWAWqQAAAN9JREFUeNqsU4sOwyAIRG199DHu/792gLXNui1LptgSRDkPFMJgITAzAWXiKi4iOP5bDHCaUcTOa1kXmUUkdqGH4Q4k4s3mguzEy74HMKqhlGIIWah6eM49gMCS1J6nyapHmNXJpnRUw/5zAXcn6lwALd4Zy61ex7mbj1HVoXGFc/3auSdgqmdq1j5fgB8Y3gHbejMuhrozL7Po9LgY4hdDvGAfDEVLpoK1MVsxw1FDtOjG90sN3wAjdoHSfL1nKmr03fKOIH1S3yFZ33S+w7NT/EpDOkU5+XG9PFieAgwAnEVFEgHUtZAAAAAASUVORK5CYII=';
+
+## Program starts here ##
+
+die("The name of a file of taxa names (or - for stdin) is required as a first argument\n") unless ($ARGV[0]);
+my @taxa =(); #store all the data in here
+
+if ($ARGV[0] eq "-") {
+  *NAMES = *STDIN;
+} else {
+  open(NAMES, "<", $ARGV[0])
+    or die "cannot open ".$ARGV[0]." for reading: $!";
+}
+
+if ($ARGV[1] && $ARGV[1] ne "-") {
+  open(OUTPUT, ">:utf8", $ARGV[1])
+    or die "cannot open ".$ARGV[1]." for (over)writing: $!";
+} else {
+  *OUTPUT = *STDOUT;
+  binmode OUTPUT, ":utf8";
+}
+
+select(OUTPUT);
+$|=1; #turn on autoflushing
+select(STDERR); #for outputting progress
+$|=1; #turn on autoflushing
+binmode STDERR, ":utf8";
+
+while() {
+  #get species names from first field (before tab)
+  #if second field is a simple integer, try to get a different image to the first available
+  chomp;
+  my @fields = split("\t");
+  $fields[0] =~ s/^\s+//; #remove initial whitespace
+  $fields[0] =~ s/\s+$//; #remove terminal whitespace, including endings
+  $fields[0] =~ s/[\s_]+/ /g; #replace whitespace and underscores with simple space
+  $fields[1] = "1" unless ($fields[1] && ($fields[1] =~ /^\d+$/));
+  $fields[1] =~ s/^\s+//; #remove initial whitespace
+  push(@taxa, {search=>$fields[0], imageNum=>$fields[1]});   #caution - this could be a blank line
+};
+close(NAMES);
+
+# WARNING - HTML links could point anywhere - even to dangerous sites.
+
+$search_params{q} = "";
+
+foreach my $taxon (@taxa) {
+  if ($taxon->{search}) {
+    $search_params{q} = $taxon->{search};
+    $search_params{exact} = 'true';
+    my $url = $searchbase."?".join("&", map{"$_=$search_params{$_}"} keys %search_params);
+    my $i=10; #try getting the search page a few times
+    while (--$i) {
+      my $sp = fetch_json_page($url);
+      if ($sp && exists $sp->{totalResults}) {
+        if ($sp->{totalResults} <= 0) {
+          if ($search_params{exact} eq 'true') {
+            print "No species found in EoL for exact match against $taxon->{search} - trying a non-exact search\n";    
+		    $search_params{exact} = 'false';
+    		$url = $searchbase."?".join("&", map{"$_=$search_params{$_}"} keys %search_params);
+    		$i = 10; #reset
+    		next;
+          } else {
+            print "No species found in EoL for non-exact match against $taxon->{search} - abandoning\n";    
+          }
+        } else {
+          my $id = $sp->{results}->[0]->{id};
+          if ($sp->{totalResults} < 1) {
+            print "More than one page found for $taxon->{search}. Using the first one (id $id):";
+            print " title='".$sp->{results}->[0]->{title}."'" if $sp->{results}->[0]->{title};
+            print " content='".$sp->{results}->[0]->{content}."'" if $sp->{results}->[0]->{content};     
+            print "\n";       
+          }
+          if (my $result = getPageInfo($id, $taxon->{imageNum})) {
+          	print OUTPUT join("\t", outputFields($taxon->{search}, $result));
+          };
+        };
+        last;
+      };
+      sleep(2); #wait a bit and try again
+    };
+    print "Could not get any results when searching EoL for $taxon->{search} (url = $url). Tried multiple times\n" unless ($i);
+  };
+  print OUTPUT "\n";
+};
+
+sub dataObjectID2URL {
+  return $_[0] ? "http://eol.org/data_objects/$_[0]" : '';	
+}
+
+sub pageID2URL {
+  return $_[0] ? "http://eol.org/pages/$_[0]/overview" : '';
+}
+
+sub getPageInfo {
+  my %data;
+  my $id = shift;
+  my $imageNum = shift;
+  return \%data unless ($id);
+
+  #hopefully these are the only 3 possible return values for vettedStatus; 
+  #perl should throw an "Use of uninitialized value" error if not
+  my %vettedStatus = (Trusted=>1, Unknown => 0, Untrusted => -1); 
+    
+  $data{speciesID} = $id;
+  my $url = $pagesbase.$id.".json?".join("&", map{"$_=$pages_params{$_}"} keys %pages_params);
+  my $i=0;
+  my $pg;
+  while (not($pg = fetch_json_page($url))) {
+    last if (++$i==10); #try getting the page a few times
+    sleep(2); #wait a bit and try again
+  };
+  unless ($pg) {
+    print "Error in getting json page result from EoL for page id $id (url = '$url'), tried $i times\n";    
+  } else {
+    #sort out names etc.
+    $data{name} = $pg->{scientificName};
+    if (@{$pg->{vernacularNames}}) {
+      foreach my $vn (@{$pg->{vernacularNames}}) {
+        if ($vn->{language} eq $vernacularLANG) {
+          if (!$data{vernacular} || ($vn->{eol_preferred} && $vn->{eol_preferred} eq 'true')) {
+            $data{vernacular} = $vn->{vernacularName};
+          }
+        }
+      }
+    }
+
+    #sort out objects (images & IUCN status)
+    if (!($pg->{dataObjects}) || 0==@{$pg->{dataObjects}}) {
+      #this is the most common problem - so indent the error to be able to see other errors more clearly
+      #print "     (no appropriate data objects found in EoL for $data{name} at ".pageID2URL($id)."\n";
+    } else {
+
+      #IUCN status has "dataType": "http://purl.org/dc/dcmitype/Text"
+      my @IUCN = grep {($_->{dataType} =~ /Text$/) &&
+                       ($_->{title} eq "IUCNConservationStatus")} @{$pg->{dataObjects}};
+      if (@IUCN==0) {
+        print "     (no IUCN data for $data{name} at ".pageID2URL($id)."\n";
+      } else {
+        print "More than one IUCN source for $data{name} at ".pageID2URL($id)."\n" if (@IUCN>1);
+        $data{IUCN} = $IUCN[0]->{description};
+      };
+
+      #images have "dataType": "http://purl.org/dc/dcmitype/StillImage"
+      my @obj = grep {($_->{dataType} =~ /StillImage$/)} @{$pg->{dataObjects}};
+      #print "$_->{dataObjectVersionID}+$_->{vettedStatus}--$_->{dataRating}\n" foreach @obj;
+      @obj = sort {$vettedStatus{$b->{vettedStatus}} <=> $vettedStatus{$a->{vettedStatus}} ||
+                   $b->{dataRating} <=> $a->{dataRating}} @obj;
+      if (@obj == 0) {
+      #  print "      (no valid images found in EoL for $data{name} at ".pageID2URL($id)."\n";
+      } else {
+        if ($imageNum > @obj) {
+          print "You asked for image number $imageNum but there are only ".scalar(@obj)." images. Will take the last one.\n";
+          $imageNum = scalar(@obj) 
+        }
+        my $obj = $obj[$imageNum-1];
+        $data{vettedStatus}=$obj->{vettedStatus};
+        $data{trusted} = ($obj->{vettedStatus} =~ m/^trusted$/i);
+        $data{original} = $obj->{source} || $obj->{mediaURL}; #e.g. http://commons.wikimedia.org/wiki/File:Masai_Woman.jpg
+        $data{licence} = $obj->{license};
+        $data{eolMediaURL} = $obj->{eolMediaURL}; # e.g. 'http://media.eol.org/content/2012/06/12/20/17507_orig.jpg',
+        $data{mediaURL} = $obj->{mediaURL}; #e.g. 'http://upload.wikimedia.org/wikipedia/commons/a/ac/Masai_Woman.jpg'
+        $data{dataObjectVersionID} = $obj->{dataObjectVersionID};
+        $data{rightsHolder} = $obj->{rightsHolder};
+        foreach my $agent (@{$obj->{agents}}) {
+          if ($agent->{role} =~ /photographer|fot.grafo|fotograaf|creator/) {
+            $data{imageBy} = trimname($agent->{full_name});
+            $data{imageByURL} = $agent->{homepage};
+          } elsif ($agent->{role} eq 'provider') {
+            $data{imageFrom} = $agent->{full_name};
+            $data{imageFromURL} = $agent->{homepage};        
+          } else {
+            print "Role not found: '$agent->{role}' on page id $id (".pageID2URL($id).")\n";
+          }
+        };
+        if (($obj->{created}) && ($obj->{created} =~ m/^(\d\d\d\d)/)) {
+          $data{year} = $1;
+        };
+      };
+    };
+  };
+  return(\%data);	
+}
+
+sub outputFields {
+  my $filter_all =  HTML::TagFilter->new(allow=>{}); #delete everything.
+  my $filter_most = new HTML::TagFilter; #defaults allow text markup, links, & images
+  $filter_most->deny_tags({ img => { all => [] }});
+  my $searchterm = shift;
+  my $d = shift;
+
+  my $licences = mklicence($d->{licence});
+  my $lic;
+
+  my @short = map {$filter_most->filter($_)} makeShortText($d);
+  my @HTML  = map {$filter_most->filter($_)} makeHTML($d);
+  my @long  = map {$filter_all->filter($_)} makeLongText($d);
+
+  splice(@short, scalar(@short) ? 1 : 0, 0, $lic) if ($lic=$licences->{short}); #insert licence into middle
+  unshift(@HTML, $lic) if ($lic = $licences->{HTML});
+  unshift(@long, $lic) if ($lic = $licences->{long});
+  
+  s/\s+/ / foreach (@short);
+  s/\s+/ / foreach (@HTML);
+  s/\s+/ / foreach (@long);
+    
+  return(
+    $d->{eolMediaURL} || '',    # 1. an EoL image URL to help downloading the image (or blank if no appropriate image found)
+    # either of next 2 fields can serve as a unique filename (blank if no appropriate image found)
+    $d->{dataObjectVersionID} || '',  # 2. the EoL "dataObjectID"
+    $d->{speciesID} || '',      # 3. the EoL "page ID"
+    $searchterm,                # 4. original search term used from input file 
+    $d->{name} || '',           # 5. found taxon name
+    $d->{vernacular} || '',     # 6. vernacular name (english)
+    $d->{IUCN} || '',           # 7. IUCN status
+    pageID2URL($d->{speciesID}),# 8. EoL spp url
+    $d->{vettedStatus} || '',   # 9. image vettedStatus 
+    join("\x{2009}/\x{2009}", @short), # 10. short credit line 
+    join("
+",@HTML),       # 11. HTML credit line 
+    join("\t", @long)           # 12+. long credit line(s) (each line separated by a new tab)
+  )
+}
+
+sub mklicence {
+  #examples of URLs passed in:
+  #  http://creativecommons.org/licenses/by-nc-sa/3.0/
+  # becomes
+  #   short => CreativeCommons BY-NC-SA 3.0
+  #   HTML  => CC BY-NC-SA 3.0
+  #   long  => CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+  #Whereas
+  #  http://creativecommons.org/licenses/publicdomain/
+  # becomes
+  #   short => Public Domain
+  #   HTML  => Public Domain
+  #   long  => Public Domain (e.g. http://creativecommons.org/licenses/publicdomain/)
+  #Other urls remain unchanged:
+  #  http://foo/bar/
+  # becomes
+  #   short => http://foo/bar
+  #   HTML  => http://foo/bar/ (if starting with http://)
+  #   long  => http://foo/bar
+  my $in = $_[0];
+  my %strings = (short=>$in, HTML =>$in, long =>$in);
+  if ($in) {
+    $strings{HTML} = ($in =~ m|^https?://|) ? "$in" : $in; #default
+
+    if (my ($desc) = ($in =~ m|http://creativecommons.org/licenses/(.*?)/?$|)) {
+      if ($desc =~ s|([^/]*)/(.*)|\U$1 $2|) { #by-nc-sa/3.0 -> BY-NC-SA 3.0
+        my $type=$1;
+        $strings{short} = "CreativeCommons $desc";
+        if (exists $CCimages{$type}) {
+          $strings{HTML} = "CC $desc";
+        } else {
+          print "couldn't find key $type in \$CCimages\n";
+          $strings{HTML} = "CC $desc";        
+        }
+        $strings{long} = "CC $desc ($in)";
+      } elsif ($desc =~ m|(publicdomain)|) {
+        my $type=$1;
+        $strings{short} = "Public Domain";
+        $strings{HTML} = "Public Domain";
+        $strings{long} = "Public Domain (e.g. $in)";
+      }
+    }
+  }
+  return \%strings;
+}
+
+sub makeShortText {
+  # Short text form from EOL is e.g. 
+  #    © $rightsHolder ($rights) / Source: $provider via $EoL_URL
+  # or if $rightsHolder missing,
+  #    $photographer (year) / Source: $provider via $EoL_URL
+  my $data = shift;
+  my @content = ();
+
+  if (my $objURL = dataObjectID2URL($data->{dataObjectVersionID})) {
+  	#always need a dataObjectVersionID if we are to return anything
+    if ($data->{rightsHolder} || $data->{rights}) {
+      if ($data->{rightsHolder}) {
+        $content[0] = Encode::decode_utf8("© ").$data->{rightsHolder};
+        $content[0] .= " ($data->{rights})"if $data->{rights};
+      } else {
+        $content[0] = $data->{rights};
+      }
+    } elsif ($data->{imageBy}) {
+      $content[0] = $data->{imageBy};
+      $content[0] .= " ($data->{year})"if $data->{year};
+    } else {
+	  print "Cannot find an attributor for ".dataObjectID2URL($data->{dataObjectVersionID}).", using 'Author unclear'\n";
+   	 #no rightsHolder or imageBy. Hmm.
+      $content[0] = "Author unclear: see EoL URL";
+    };
+  
+    $content[1] = "Source: ";
+    if ($data->{imageFrom}) {
+      $content[1] .= "$data->{imageFrom} via ";
+    } elsif ($data->{original}) {
+      $content[1] .= "$data->{original} via ";
+    }
+    $content[1] .= "$objURL";
+  }
+  return(@content);
+}
+
+sub makeHTML {
+  # HTML form copied from EoL, for example:
+  # $photographer ($year)
+© $rightsHolder ($rights)
+From  via Encyclopedia of Life
+  my $data = shift;
+  my @content = ();
+
+  if (my $objURL = dataObjectID2URL($data->{dataObjectVersionID})) {  
+    if ($data->{imageBy}) {
+      if ($data->{imageByURL}) {
+  	    push @content, "By ".encode_entities($data->{imageBy})."";
+   	  } else {
+   	    push @content, encode_entities("$data->{imageBy}");
+      }
+      $content[-1] .= " ($data->{year})" if $data->{year};
+    }
+    if ($data->{rightsHolder} || $data->{rights}) {
+      if ($data->{rightsHolder}) {
+        push @content, '© '.$data->{rightsHolder};
+        $content[-1] .= " ($data->{rights})" if $data->{rights};
+      } else {
+        push @content, $data->{rights};
+      }
+    }
+  
+    if ($data->{original}) {
+      push @content, "Original from ";
+    } else {
+	  push @content, "Original from ";
+    }  	
+    if ($data->{imageFrom}) {
+      if ($data->{imageFromURL}) {
+        $content[-1] .= "$data->{imageFrom} via ";
+      } else {
+        $content[-1] .= "$data->{imageFrom} via ";
+      }
+    }
+    $content[-1] .= "$objURL";
+  }
+  return(@content);
+}
+
+sub makeLongText {
+  #Long text form is essentially a text equivalent of the HTML form, lines separated by tabs, example
+  #    $photographer ($year)
+  #    © $rightsHolder ($rights)
+  #    From $provider via Encyclopedia of Life ($EoL_URL)
+  # the URLs of the source and 
+  my $data = shift;
+  my @content= ();
+  
+  if ($data->{imageBy}) {
+    push @content, "By $data->{imageBy}";
+    $content[-1] .= " ($data->{year})" if $data->{year};
+  }
+  if ($data->{rightsHolder} || $data->{rights}) {
+    if ($data->{rightsHolder}) {
+      push @content, Encode::decode_utf8("© ").$data->{rightsHolder};
+      $content[-1] .= " ($data->{rights})" if $data->{rights};
+    } else {
+      push @content, $data->{rights};
+    }
+  }
+
+  if (my $objURL = dataObjectID2URL($data->{dataObjectVersionID})) {  
+    push @content, "From ";
+    if ($data->{imageFrom}) {
+      $content[-1] .= "$data->{imageFrom} via ";
+    } elsif ($data->{original}) {
+      if ($data->{original} =~ m|(http://[^/]+)|) {
+        $content[-1] .= "$1 via ";
+      } else {
+        $content[-1] .= "$data->{original} via ";
+      }
+    }
+    $content[-1] .= "$objURL";
+  };
+  return(@content);
+}
+
+sub fetch_json_page
+{
+  my $json = new JSON;
+  my ($json_url) = shift;
+  # download the json page:
+  my $content = get( $json_url );
+  # these are some nice json options to relax restrictions a bit:
+  my $json_text = $json->allow_nonref->utf8->relaxed->escape_slash->loose->allow_singlequote->allow_barekey->decode($content);
+  return $json_text;
+}
+
+sub trimname {
+  #take an author name and make it nicer
+  my $name = decode_entities(shift);
+  $name =~ s/^\s*creator:?//i; #common idiom to start wikicommons authors with e.g. Creator: Joseph Smit
+  $name =~ s/^\s*//;
+  $name =~ s/\s*$//;
+  $name =~ s/^(?:<.+?>)*unknown(?:<.+?>)*$//i; #strip "unknown" and tags
+  return $name;
+}

@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHBA-2015-0342" Revision="1" CVE_ID="">
+  <Status>Enabled</Status>
+  <Patches>
+    <Patch UniqueFilename="*lorax-19.6.51-1.el7.x86_64.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>lorax-19.6.51-1.el7.x86_64.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>lorax::x86_64</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>ac433c0b0fc2fb38980c341f4e46fe9e769d8ed45e97953cc3bd16ade946f68c</Checksum>
+          <Version>19.6.51-1.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>46277</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk lorax  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-03-05T00:00:00.0000000</PublishDate>
+  <Title>lorax bug fix and enhancement update</Title>
+  <Description>
+        
+Lorax is a tool for creating the anaconda install images. It also includes
+livemedia-creator which is used to create bootable livemedia, including live
+isos and disk images. It can use libvirtd for the install, or Anaconda's image
+install feature. 
+Bug fixes:
+ Previously, the plymouth dracut module was excluded from the IBM Power Systems
+initrd and upgrade.img images because the initrd daemon was exceeding the 32MiB
+limit. As a consequence, upgrades on the aforementioned platform did not work
+correctly. This update allows the plymouth dracut module to be added to
+upgrades.img, which has no size limit like initrd, and upgrades on IBM Power
+Systems now work correctly. (BZ#1069671)
+ Booting from DVD on IBM System z requires kernel arguments that were
+previously missing, which caused that the IBM System z was not able to boot from
+DVD. A new rpm file has been added with DVD specific commands in it to fix this
+bug, and IBM System z now boots from DVD successfully. (BZ#1132050) 
+ Prior to this update, the petitboot bootloader could not parse certain aspects
+of grub2.cfg files. As a consequence, petitboot did not boot DVD media. The
+32-bit section has been deleted from grub2.cfg, and petitboot can now boot the
+DVD media successfully. (BZ#1169878) 
+ Previously, the 64-bit ARM architecture lorax template did not include the
+boot.iso creation section, which caused that the boot.iso image was not created.
+This update adds the mkisofs command to the template, and the boot.iso is now
+created by lorax as expected. (BZ#1174475) 
+ When running the lorax utility in non-English locales, the yum action string
+could cause a traceback error. Consequently, running lorax on different locales
+failed. This update makes sure that the yum action string is UTF-8 encoded
+before printing it, and lorax can now be used in other locales. (BZ#1072362) 
+ As BOOTAARCH64.efi is not a File Allocation Table (FAT) compliant file name,
+the installation could not boot on all UEFI implementations. To fix this bug,
+the name has been changed to BOOTAA64.efi, which is compatible with all UEFI
+implementations, thus fixing the bug. (BZ#1080113) 
+Enhancements:
+ With this update, the image-minimizer tool is available to be used with the
+livemedia-creator utility and other projects using the kickstart installation
+method. (BZ#1082642) 
+ IBM Power Systems support has been added to the livemedia-creator utility, so
+that live media, such as ISO or disk images, can be built on this platform.
+(BZ#1102318) 
+ The od, hexdump, and hexedit utilities have been added to lorax as well as all
+the binaries from sg3_utils. In addition, rescue mode is more useful for system
+examination and repair as the xfsdump and xfsrestore utilities are now also
+available. (BZ#1109785) 
+ With this update, the kdump anaconda addon is included in the installation
+media to make the kdump utility available for use and configuration in anaconda.
+(BZ#1116335) 
+ The Intelligent Platform Management Interface (IPMI) kernel drivers and
+impitools have now been included in the installation media to support the
+ability of anaconda to log the installation state using IPMI. (BZ#1126009)
+ Support for the livemedia-creator utility has been added to help in creating
+Docker images. The support includes the addition of "--make-fsimage" option to
+the virt-install utility and the "--make-tar" option, which creates a xz
+compressed tarfiles of the root file system. (BZ#1144140) 
+ To be consistent with other architectures and to be able to boot initrd images
+larger than 32MiB, grub2 is now used on IBM Power Systems installation media
+instead of yaboot. (BZ#1131199) 
+ Support for the little-endian variant of IBM Power Systems has been added, so
+the lorax utility can now create installation media for this platform.
+(BZ#1136490)
+        Note for remediation: Please disable the SELinux for RHEL 4/5 when repairing, or some rpm packages will fail to install.</Description>
+  <Severity>5</Severity>
+  <Vendor>Redhat</Vendor>
+  <MoreInfoURL>https://access.redhat.com/errata/RHBA-2015:0342</MoreInfoURL>
+  <FAQURL />
+</Vulnerability>

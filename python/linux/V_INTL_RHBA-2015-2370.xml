@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHBA-2015-2370" Revision="1" CVE_ID="">
+  <Status>Enabled</Status>
+  <Patches>
+    <Patch UniqueFilename="*virt-who-0.14-9.el7.noarch.rpm" Silent="CRSNo" Reboot="RNo" Download="DManual">
+      <Name>virt-who-0.14-9.el7.noarch.rpm</Name>
+      <Comments />
+      <URL />
+      <State>Enabled</State>
+      <Files>
+        <File>
+          <Path>virt-who::noarch</Path>
+          <FileDate>0001-01-01T00:00:00.0000000</FileDate>
+          <FileSize>0</FileSize>
+          <Checksum>4c58fecd159f09794fb67e3500c527cbc51d45e491919c66f51ed156e63b8b04</Checksum>
+          <Version>0.14-9.el7</Version>
+          <CommandID>e</CommandID>
+          <Flags>P</Flags>
+        </File>
+      </Files>
+      <Products>
+        <ID>35534</ID>
+      </Products>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars />
+      <Cmds>
+        <Cmd Type="shellscript">
+          <Args>
+            <Arg N="scriptcode" V="#!/bin/bash&#xA;&#xA;function updatepk()&#xA;{&#xA; if [ ! -z $1 ]; then&#xA;   if [ -e /var/run/yum.pid ];then &#xA;    exit 10  &#xA;   fi&#xA;   result=`yum -y update $1 2&gt;&amp;1` &#xA;   status=$? &#xA;   commandexist=`echo $result | grep -E &quot;yum: command not found&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;    commandexist=`echo $result | grep -E &quot;yum: No such file or directory&quot;`&#xA;   if [ &quot;$commandexist&quot; != &quot;&quot; ]; then&#xA;     exit 8&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;lock /var/run/yum.pid&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   islock=`echo $result | grep -E &quot;/var/run/yum.pid: another copy is running&quot;`&#xA;   &#xA;   if [ &quot;$islock&quot; != &quot;&quot; ]; then&#xA;     exit 10&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;There was an error communicating with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;   isnotconnected=`echo $result | grep -E &quot;This system is not registered with RHN&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;   &#xA;    isnotconnected=`echo $result | grep -E &quot;No Repositories Available to Set Up&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isnotconnected=`echo $result | grep -E &quot;Error Class Code: 9 Error Class Info: Invalid System Credentials&quot;`&#xA;   if [ &quot;$isnotconnected&quot; != &quot;&quot; ]; then&#xA;     exit 9&#xA;   fi&#xA;    isscriptletfailed=`echo $result | grep -E &quot;error:&quot; | grep -E &quot;scriptlet failed, exit status 255&quot;`&#xA;    if [ &quot;$isscriptletfailed&quot; != &quot;&quot; ]; then&#xA;     exit 6&#xA;   fi&#xA;   if [ $status -ne 0 ];then&#xA;     exit 7&#xA;   fi &#xA; fi&#xA;}&#xA;updatepk virt-who  &#xA;&#xA;exit 0" />
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-11-19T00:00:00.0000000</PublishDate>
+  <Title>virt-who bug fix and enhancement update</Title>
+  <Description>
+        
+The virt-who service collects information about the connection between the hypervisor and its virtual guests that are present in the system and provides the the subscription manager with a mapping file containing the hypervisor-guest pairs. The service periodically queries the hypervisor to report its guests and changes the mapping file accordingly, making sure that the information stored in the subscription manager is accurate.
+The virt-who package has been upgraded to upstream version 0.14, which provides a number of bug fixes and enhancements over the previous version. (BZ#1200374)
+This update also fixes the following bugs:
+ On a system connected to a large amount of VMware ESXi or vCenter environments, using the virt-who utility to read the host-guest association took a long time or failed due to a to a time-out. With this update, virt-who now uses an optimized way of communication with ESXi/vCenter servers. As a result, virt-who takes less time to report the guest-host association, and is not terminated by timeout any more. (BZ#1188718)
+ The virt-who agent ignored the HTTP proxy configuration in the ESX virtualization back end. As a consequence, virt-who did not use the proxy server when connecting to the ESX server, and the connection could fail. With this update, virt-who uses the http_proxy environment variable in ESX mode, thus fixing this bug. (BZ#1214160)
+ Previously, virt-who queries in some situations consumed significantly more CPU resources than expected. This update addresses the bug, and virt-who queries are now more consistently efficient in CPU usage. (BZ#1237286)
+In addition, this update adds the following enhancements:
+ The virt-who service introduces a filtering mechanism for the Subscription Manager reports. As a result, users can now choose which hosts virt-who should display according to the specified parameters. For example, they can filter out hosts that do not run any Red Hat Enterprise Linux guests, or hosts that run guests of a specified version of Red Hat Enterprise Linux. (BZ#1163608)
+ With this update, virt-who is able to acquire data from multiple hypervisors in parallel. Previously, virt-who could read data only from a single hypervisor at a time, and if one hypervisor in a series was non-functional, virt-who waited for its response and thus failed. Reading parallel hypervisors works around this problem and prevents the described failure. (BZ#1159229)
+ The virt-who utility uses the "--sam" option to collect information from Red Hat Satellite 6, but for Red Hat Satellite 5, it uses the "--satellite" option. To make the use of these options more intuitive, "--satellite" has been changed to "--satellite5" and "--satellite6" is an alias for "--sam". (BZ#1187575)
+ The "-p" option has been added to the virt-who utility. When used with "-p", virt-who output displays a Javascript Object Notation (JSON)-encoded map of the host-guest association. In addition, the information on host-guest association logged in the /var/log/rhsm/rhsm.log file is now formatted in JSON as well. (BZ#1223973)
+ It is now possible to configure the virt-who query so that its results are displayed as host names instead of as Universally Unique Identifiers (UUIDs) when viewed in Red Hat Satellite and Red Hat Customer Portal. To enable the function, add the "hypervisor_id=hostname" option to the configuration file in the /etc/virt-who.d/ directory. Ideally, this should be done before using virt-who for the first time, otherwise changing the configuration duplicates the hypervisor. (BZ#1245802)
+ A default configuration file has been placed in the /etc/virt-who.d/ directory. It contains a template and instructions for the user to configure virt-who. This method replaces the deprecated configuration that uses the /etc/sysconfig/virt-who file. (BZ#1250159)
+        Note for remediation: Please disable the SELinux for RHEL 4/5 when repairing, or some rpm packages will fail to install.</Description>
+  <Severity>5</Severity>
+  <Vendor>Redhat</Vendor>
+  <MoreInfoURL>https://access.redhat.com/errata/RHBA-2015:2370</MoreInfoURL>
+  <FAQURL />
+</Vulnerability>
