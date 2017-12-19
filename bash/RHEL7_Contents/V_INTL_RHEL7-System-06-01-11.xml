@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-System-06-01-11" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Restrict at/cron to Authorized Users  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Restrict at/cron to Authorized Users  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0 
+REASON="at/cron is not restricted to Authorized Users." 
+EXPECT="Restrict at/cron to Authorized Users." 
+
+if [ -e "/etc/at.deny" -o -e "/etc/cron.deny" ];then
+  RV=1
+fi
+rpm -q cronie &amp;&gt;/dev/null
+if [ $? -eq 0 ];then
+  flag=$(stat -c "%U:%G:%A" /etc/cron.allow 2&gt;/dev/null )
+  if [ ! -e "/etc/cron.allow" ];then
+    RV=1
+  elif [ ${flag} != "root:root:-rw-------" ];then
+    RV=1   
+  fi
+fi
+rpm -q at &amp;&gt;/dev/null
+if [ $? -eq 0 ];then
+  flag=$(stat -c "%U:%G:%A" /etc/at.allow 2&gt;/dev/null )
+  if [ ! -e "/etc/at.allow" ];then
+    RV=1
+  elif [ ${flag} != "root:root:-rw-------" ];then
+    RV=1   
+  fi
+fi
+
+
+if [ $RV -eq 1 ]; then 
+	echo $REASON &gt;&amp;1 
+	echo $EXPECT &gt;&amp;2 
+fi 
+exit $RV</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Restrict at/cron to Authorized Users  </Title>
+  <Description> Configure /etc/cron.allow and /etc/at.allow to allow specific users to use these services. If /etc/cron.allow or /etc/at.allow do not exist, then /etc/at.deny and /etc/cron.deny are checked. Any user not specifically defined in those files is allowed to use at and cron. By removing the files, only users in /etc/cron.allow and /etc/at.allow are allowed to use at and cron. Note that even though a given user is not listed in cron.allow, cron jobs can still be run as that user. The cron.allow file only controls administrative access to the crontab command for scheduling and modifying cron jobs.
+	  
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>System</Category>
+</Vulnerability>

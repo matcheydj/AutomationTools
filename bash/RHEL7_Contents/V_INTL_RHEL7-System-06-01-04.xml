@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-System-06-01-04" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Set User/Group Owner and Permission on /etc/crontab  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Set User/Group Owner and Permission on /etc/crontab  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0 
+REASON="no correct User/Group owner or permission is set on /etc/crontab" 
+EXPECT="Set User/Group Owner and Permission on /etc/crontab" 
+
+stat -c "%a%u%g" /etc/crontab | egrep ".0000" &amp;&gt;/dev/null
+if [ $? -ne 0  ]; then
+	RV=1
+fi
+if [ $RV -eq 1 ]; then 
+	echo $REASON &gt;&amp;1 
+	echo $EXPECT &gt;&amp;2 
+fi 
+exit $RV</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Set User/Group Owner and Permission on /etc/crontab  </Title>
+  <Description>The /etc/crontab file is used by cron to control its own jobs. The commands in this item make here sure that root is the user and group owner of the file and is the only user that can read and write the file. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>System</Category>
+</Vulnerability>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-SpecialServices-03-06" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Configure Network Time Protocol   (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Configure Network Time Protocol   (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+servicename="Network Time Protocol"
+reason="The $servicename is not configured"
+if [ ! -e "/etc/ntp.conf" ];then 
+    exit 0
+fi
+isconfigured1=`grep -v "[^\\s| ]*#" /etc/ntp.conf| grep -E 'restrict default'  | cut -f 3- -d " " | grep "kod" |grep "nomodify"| grep "notrap"| grep "nopeer"| grep "noquery"   2&gt; /dev/null `
+if [  -z "${isconfigured1}" ];then
+    RV=1
+fi
+isconfigured2=`grep -E -v "[^\\s| ]*#"  /etc/ntp.conf | grep -E 'restrict -6 default'| cut -f 4- -d" " | grep "kod" |grep "nomodify"| grep "notrap"| grep "nopeer"| grep "noquery"   2&gt; /dev/null `
+if [  -z "${isconfigured2}" ];then
+    RV=1
+fi
+
+isconfigured3=`grep -E -v "[^\\s| ]*#" /etc/ntp.conf | grep -E '^server'`
+if [  -z "${isconfigured3}" ];then
+    RV=1
+fi
+isconfigured4=`grep -E -v "[^\\s| ]*#"  /etc/sysconfig/ntpd | grep 'ntp:ntp'`
+if [  -z "${isconfigured4}" ];then
+    RV=1
+fi
+
+if [ $RV -eq 1 ]; then
+	echo "${reason}" &gt;&amp;1
+	echo "The $servicename should be configured" &gt;&amp;2
+fi
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Configure Network Time Protocol   </Title>
+  <Description>The Network Time Protocol (NTP) is designed to synchronize system clocks across a 
+variety of systems and use a source that is highly accurate. The version of NTP delivered 
+with Red Hat can be found at http://www.ntp.org. NTP can be configured to be a client 
+and/or a server. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Special Services</Category>
+</Vulnerability>

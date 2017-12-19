@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Filesystem-01-01-02" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Set nodev option for /tmp Partition  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Set nodev option for /tmp Partition  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+reason="No nodev option for /tmp Partition"
+par=$(grep -v "^#" /etc/fstab|grep "[[:space:]]/tmp[[:space:]]")
+par1=$(mount | grep "[[:space:]]/tmp[[:space:]]")
+npar=$(grep -v "^#" /etc/fstab|grep "[[:space:]]/tmp[[:space:]]" | grep nodev)
+mpar=$(mount | grep "[[:space:]]/tmp[[:space:]]" | grep nodev)
+if [ -n "${par}" ];then
+    
+    if [ -z "$npar" ]; then
+	RV=1
+    fi
+fi
+if [ -n "${par1}" ];then
+    
+    if [ -z "$mpar" ]; then
+	RV=1
+    fi
+fi
+if [ $RV -eq 1 ]; then
+	echo $reason &gt;&amp;1
+	echo "Set nodev option for /tmp Partition." &gt;&amp;2
+fi
+exit $RV
+</DetectScript>
+        <DetectScriptDescription>No nodev option for /tmp Partition.</DetectScriptDescription>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Set nodev option for /tmp Partition  </Title>
+  <Description>The nodev mount option specifies that the filesystem cannot contain special devices. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Filesystem and Updates</Category>
+</Vulnerability>

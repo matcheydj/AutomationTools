@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-SpecialServices-03-03" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Disable Avahi Server  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Disable Avahi Server  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0 
+servicename="avahi-daemon" 
+reason="The $servicename is not disabled." 
+systemctl is-enabled $servicename &amp;&gt;/dev/null
+if [ $? -eq 0  ];then 
+RV=1 
+fi 
+if [ $RV -eq 1 ]; then 
+echo "${reason}" &gt;&amp;1 
+echo "The $servicename should be disabled." &gt;&amp;2 
+fi 
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Disable Avahi Server  </Title>
+  <Description>Avahi is a free zeroconf implementation, including a system for multicast DNS/DNS-SD 
+service discovery. Avahi allows programs to publish and discover services and hosts 
+running on a local network with no specific configuration. For example, a user can plug a 
+computer into a network and Avahi automatically finds printers to print to, files to look at 
+and people to talk to, as well as network services running on the machine. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Special Services</Category>
+</Vulnerability>

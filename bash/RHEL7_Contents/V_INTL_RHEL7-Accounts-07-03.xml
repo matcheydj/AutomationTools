@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Accounts-07-03" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Set Default Group for root Account  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Set Default Group for root Account  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0 
+REASON="Default Group for root Account is not 0." 
+EXPECT="Set Default Group for root Account to 0." 
+group=$(grep "^root:" /etc/passwd | cut -f4 -d:)
+if [ $group -ne 0 ]; then
+	RV=1
+fi
+if [ $RV -eq 1 ]; then 
+	echo $REASON &gt;&amp;1 
+	echo $EXPECT &gt;&amp;2 
+fi 
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Set Default Group for root Account  </Title>
+  <Description>The usermod command can be used to specify which group the root user belongs to. This affects permissions of files that are created by the root user. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Accounts and Environment</Category>
+</Vulnerability>

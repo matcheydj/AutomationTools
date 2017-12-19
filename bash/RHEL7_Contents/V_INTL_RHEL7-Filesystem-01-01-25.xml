@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Filesystem-01-01-25" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 2</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Ensure separate partition exists for /var/tmp (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Ensure separate partition exists for /var/tmp  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+reason="No separate partition for /var/tmp"
+original_reason=$reason
+par=$(mount|grep "[[:space:]]/var/tmp[[:space:]]")
+if [ "$par" == "" ]; then
+	RV=1
+fi
+if [ $RV -eq 1 ]; then
+	echo $reason &gt;&amp;1
+	echo "Create Separate Partition for /var/tmp." &gt;&amp;2
+fi
+exit $RV
+</DetectScript>
+        <DetectScriptDescription>No separate partition for /var/tmp.</DetectScriptDescription>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2017-04-27T00:00:00.0000000+00:00</PublishDate>
+  <Title>Ensure separate partition exists for /var/tmp </Title>
+  <Description>Since the /var/tmp directory is intended to be world-writable, there is a risk of resource exhaustion if it is not bound to a separate partition. In addition, making /var/tmp its own file system allows an administrator to set the noexec option on the mount, making /var/tmp useless for an attacker to install executable code. It would also prevent an attacker from establishing a hardlink to a system setuid program and wait for it to be updated. Once the program was updated, the hardlink would be broken and the attacker would have his own copy of the program. If the program happened to have a security vulnerability, the attacker could continue to exploit the known flaw. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Filesystem and Updates</Category>
+</Vulnerability>

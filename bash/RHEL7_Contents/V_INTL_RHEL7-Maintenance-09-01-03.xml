@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Maintenance-09-01-03" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Verify Permissions on /etc/shadow  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Verify Permissions on /etc/shadow  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+Reasons="Some Permission is set on /etc/shadow."
+Expected="No permission is set on /etc/shadow."
+
+perm=$(stat -c "%a" /etc/shadow 2&gt;/dev/null)
+if [ "$perm" != "0" ];then
+    RV=1
+fi
+
+if [ $RV -eq 1 ]; then
+	echo $Reasons &gt;&amp;1
+	echo $Expected &gt;&amp;2
+fi
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Verify Permissions on /etc/shadow  </Title>
+  <Description> The /etc/shadow file is used to store the information about user accounts that is critical to the security of those accounts, such as the hashed password and other security information.
+	  Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Maintenance</Category>
+</Vulnerability>

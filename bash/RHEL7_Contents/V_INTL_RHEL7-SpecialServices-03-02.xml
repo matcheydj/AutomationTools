@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-SpecialServices-03-02" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Remove the X Window System  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Remove the X Window System  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+servicename="xorg-x11-server-common"
+reason="The X Window System is not removed"
+graphical=$(ls -l /etc/systemd/system/default.target 2&gt;/dev/null | grep graphical.target)
+xserver=$(rpm -q xorg-x11-server-common &amp;&gt;/dev/null)
+if [  -n "${graphical}" -o $? -eq 0 ];then
+    RV=1
+fi
+if [ $RV -eq 1 ]; then
+	echo "${reason}" &gt;&amp;1
+	echo "The  X Window System should be removed" &gt;&amp;2
+fi
+exit $RV</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Remove the X Window System  </Title>
+  <Description>The X Window system provides a Graphical User Interface (GUI) where users can have 
+multiple windows in which to run programs and various add on. The X Window system is 
+typically used on desktops where users login, but not on servers where users typically do 
+not login. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Special Services</Category>
+</Vulnerability>

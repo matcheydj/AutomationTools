@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Banners-08-02" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Remove OS Information from Login Warning Banners  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Remove OS Information from Login Warning Banners  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+Reasons="OS Information is In Login Warning Banners (/etc/issue,/etc/issue.net,/etc/motd)."
+Expected="Remove OS Information from Login Warning Banners (/etc/issue,/etc/issue.net,/etc/motd)."
+issue=$(egrep '^[^#]' /etc/issue 2&gt;/dev/null |egrep '(\\v|\\r|\\m|\\s)')
+motd=$(egrep '^[^#]' /etc/motd 2&gt;/dev/null |egrep '(\\v|\\r|\\m|\\s)' )
+net=$(egrep '^[^#]' /etc/issue.net 2&gt;/dev/null |egrep '(\\v|\\r|\\m|\\s)')
+
+if [ -n "$issue" -o -n "$motd" -o -n "$net" ];then
+    RV=1
+fi
+
+if [ $RV -eq 1 ]; then
+	echo $Reasons &gt;&amp;1
+	echo $Expected &gt;&amp;2
+fi
+exit $RV </DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Remove OS Information from Login Warning Banners  </Title>
+  <Description>Unix-based systems have typically displayed information about the OS release and patch level upon logging in to the system. This information can be useful to developers who are developing software for a particular OS platform. If mingetty(8) supports the following options, they display operating system information:  
+\m - machine architecture (uname -m) 
+\r - operating system release (uname -r) 
+\s - operating system name 
+\v - operating system version (uname -v) 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Warning Banners</Category>
+</Vulnerability>

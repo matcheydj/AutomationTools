@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Maintenance-09-02-13" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Check User Home Directory Ownership  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Check User Home Directory Ownership  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+Reasons="The ownership of the following user home directory is not correct:"
+Expected="The user must be the owner of the user home directory."
+
+home=$(grep -v '^+' /etc/passwd | awk -F: '{ print $1 " " $3 " " $6 }' | while read user uid dir; do
+  if [ $uid -ge 1000 -a  -d "$dir" -a $user != "nfsnobody" ]; then
+    owner=$(stat -L -c "%U" "$dir")
+    if [ "$owner" != "$user" ]; then
+      echo "$dir"
+    fi
+  fi
+done)
+homes=$(echo $home|tr ' ' ',')
+
+if [ -n "$homes" ];then
+  RV=1
+fi
+
+if [ $RV -eq 1 ]; then
+	echo $Reasons${homes}. &gt;&amp;1
+	echo $Expected &gt;&amp;2
+fi
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Check User Home Directory Ownership  </Title>
+  <Description>The user home directory is space defined for the particular user to set local environment variables and to store personal files. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Maintenance</Category>
+</Vulnerability>

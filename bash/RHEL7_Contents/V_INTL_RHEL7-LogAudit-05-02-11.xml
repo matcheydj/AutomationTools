@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-LogAudit-05-02-11" Revision="1">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 2</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Collect Unsuccessful Unauthorized Access Attempts to Files (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Collect Unsuccessful Unauthorized Access Attempts to Files (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+Reasons="Unsuccessful attempts to access files are not monitored."
+Expected="Monitor for unsuccessful attempts to access files."
+
+access=$(awk '$1=="-a" {r=gensub(/(-[a-zA-Z]) */,"\\1","G");
+R=gensub(/ *(>) *(=) */,"\\1\\2","G",r);
+s=gensub(/ *(=) *(-) */,"\\1\\2","G",r);
+t=gensub(/ *(!) *(=) */,"\\1\\2","G",s);
+if (t~/-aalways,exit/ &amp;&amp; t~/-Screat/ &amp;&amp; t~/-Sopen/ &amp;&amp; t~/-Sopenat/ &amp;&amp; t~/-Struncate/ &amp;&amp; t~/-Sftruncate/ &amp;&amp; t~/-Fexit=-EACCES/ &amp;&amp; t~/-Fauid>=1000/ &amp;&amp; t~/-Fauid!=4294967295/ &amp;&amp; t~/-kaccess/ || t~/-aexit,always/)
+{if (t~/-Farch=b64/) print t;
+if (t~/-Farch=b32/) print t}}' /etc/audit/audit.rules |wc -l)
+
+
+perm=$(awk '$1=="-a" {r=gensub(/(-[a-zA-Z]) */,"\\1","G");
+R=gensub(/ *(>) *(=) */,"\\1\\2","G",r);
+s=gensub(/ *(=) *(-) */,"\\1\\2","G",r);
+t=gensub(/ *(!) *(=) */,"\\1\\2","G",s);
+if (t~/-aalways,exit/ &amp;&amp; t~/-Screat/ &amp;&amp; t~/-Sopen/ &amp;&amp; t~/-Sopenat/ &amp;&amp; t~/-Struncate/ &amp;&amp; t~/-Sftruncate/ &amp;&amp; t~/-Fexit=-EPERM/ &amp;&amp; t~/-Fauid>=1000/ &amp;&amp; t~/-Fauid!=4294967295/ &amp;&amp; t~/-kaccess/ || t~/-aexit,always/)
+{if (t~/-Farch=b64/) print t;
+if (t~/-Farch=b32/) print t}}' /etc/audit/audit.rules |wc -l)
+
+if [ $access -ne 2 -o $perm -ne 2 ];then
+  RV=1
+fi
+
+if [ $RV -eq 1 ]; then
+	echo $Reasons${dirs}. &gt;&amp;1
+	echo $Expected &gt;&amp;2
+fi
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Collect Discretionary Access Control Permission Modification Events</Title>
+  <Description> Monitor for unsuccessful attempts to access files. The parameters below are associated with system calls that control creation (creat), opening (open, openat) and truncation (truncate, ftruncate) of files. An audit log record will only be written if the user is a nonprivileged user (auid > = 1000), is not a Daemon event (auid=4294967295) and if the system call returned EACCES (permission denied to the file) or EPERM (some other permanent error associated with the specific system call). All audit records will be tagged with the identifier "access."
+Rationale:
+Failed attempts to open, create or truncate files could be an indication that an individual or process is trying to gain unauthorized access to the system.
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Logging and Auditing</Category>
+</Vulnerability>

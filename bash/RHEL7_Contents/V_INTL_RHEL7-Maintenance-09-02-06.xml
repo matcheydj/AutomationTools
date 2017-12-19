@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Maintenance-09-02-06" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Ensure root PATH Integrity  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Ensure root PATH Integrity  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+Reasons="The current working directory (.) or other writable directory is in root's executable path." 
+Expected="The root's  executable path does not contain the current working directory (.) or other writable directory."
+
+source /etc/profile
+source /root/.bash_profile
+if [ "`echo $PATH | /bin/grep :: `" != "" ]; then
+  RV=1
+fi
+if [ "`echo $PATH | /bin/grep :$`" != "" ]; then
+  RV=1
+fi
+p=`echo $PATH | /bin/sed -e 's/::/:/' -e 's/:$//' -e 's/:/ /g'`
+set -- $p
+while [ "$1" != "" ]; do
+  if [ "$1" = "." ]; then
+    RV=1
+    shift
+    continue
+  fi
+  if [ -d $1 ]; then
+   dirperm=`/bin/ls -ldH $1 | /bin/cut -f1 -d" "`
+   if [ `echo $dirperm | /bin/cut -c6 ` != "-" ]; then
+     RV=1
+     dirs=${dirs}${dirs+","}"$1"
+     shift
+     continue
+   fi
+   if [ `echo $dirperm | /bin/cut -c9 ` != "-" ]; then
+     RV=1
+     dirs=${dirs}${dirs+","}"$1"
+     shift
+     continue
+   fi
+   dirown=`ls -ldH $1 | awk '{print $3}'`
+   if [ "$dirown" != "root" ] ; then
+     RV=1
+     dirs=${dirs}${dirs+","}"$1"
+     shift
+     continue
+   fi
+  fi
+  shift
+done
+
+if [ $RV -eq 1 ]; then
+        echo ${Reasons}${dirs+"Please check the following directory:${dirs}"} &gt;&amp;1
+	echo $Expected &gt;&amp;2
+fi
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Ensure root PATH Integrity  </Title>
+  <Description>The root user can execute any command on the system and could be fooled into executing programs unintentionally if the PATH is not set correctly. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Maintenance</Category>
+</Vulnerability>

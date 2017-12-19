@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-LogAudit-05-02-08" Revision="1">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 2</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Collect Login and Logout Events  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Collect Login and Logout Events  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+reason="Login and Logout events are not collected."
+
+     rev=`grep logins /etc/audit/audit.rules |  grep -E "^[[:space:]]*-w[ ]+/var/log/faillog " | grep -E " -p[[:space:]]+wa"| grep -E " -k[[:space:]]+logins"`
+     if [ -z "$rev" ];then
+        RV=1
+     fi  
+
+     rev=`grep logins /etc/audit/audit.rules |  grep -E "^[[:space:]]*-w[ ]+/var/log/lastlog " | grep -E " -p[[:space:]]+wa"| grep -E " -k[[:space:]]+logins"`
+     if [ -z "$rev" ];then
+        RV=1
+     fi  
+     rev=`grep logins /etc/audit/audit.rules |  grep -E "^[[:space:]]*-w[ ]+/var/log/tallylog " | grep -E " -p[[:space:]]+wa"| grep -E " -k[[:space:]]+logins"`
+     if [ -z "$rev" ];then
+        RV=1
+     fi  
+if [ $RV -eq 1 ]; then
+	echo "${reason}" &gt;&amp;1
+	echo "Collect Login and Logout Events." &gt;&amp;2
+fi
+
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Collect Login and Logout Events  </Title>
+  <Description>Monitor login and logout events. The parameters below track changes to files associated with login/logout events. The file /var/log/faillog tracks failed events from login. The file /var/log/lastlog maintain records of the last time a user successfully logged in. The file /var/log/btmp keeps track of failed login attempts and can be read by entering the command /usr/bin/last -f /var/log/btmp. All audit records will be tagged with the identifier "logins." 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Logging and Auditing</Category>
+</Vulnerability>

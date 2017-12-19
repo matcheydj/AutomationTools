@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-LogAudit-05-01-06" Revision="1">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Ensure syslog-ng default file permissions configured" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Ensure syslog-ng default file permissions configured</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0 
+REASON="syslog-ng default file permissions are not properly configured" 
+EXPECT="Ensure syslog-ng default file permissions configured" 
+
+if [ ! -e /etc/syslog-ng/syslog-ng.conf ];then
+   exit 0
+fi
+
+perm=$(grep ^options /etc/syslog-ng/syslog-ng.conf | grep -o "perm([0-9]*)")
+
+ret=$(echo $perm | awk -F"[\\\(\\\)]" '{if($2>0640)print "detected"}')
+
+if [ "$ret" == "detected" ]; then
+	RV=1
+fi
+if [ $RV -eq 1 ]; then 
+echo "${REASON}:${logs}" &gt;&amp;1 
+	echo $EXPECT &gt;&amp;2 
+fi 
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+     <Cmds>
+        <Cmd Type="ShellScript">
+          <Args>
+		  <Arg N="ScriptCode" V="#!/bin/bash&#10;#set -x&#10;if [ ! -e '/etc/syslog-ng/syslog-ng.conf-preHardening' ];then&#10;cp /etc/syslog-ng/syslog-ng.conf  /etc/syslog-ng/syslog-ng.conf-preHardening&#10;fi&#10;awk -F&quot;;&quot; '/^#/{print $0;next}{if(/^options/){split($0,list,&quot;:&quot;);for (var in list){if(list[var]~/perm/){split(list[var],perms,&quot;\\(|\\)&quot;);sub(perms[2],&quot;0640&quot;,list[var]);print $0}}}' /etc/syslog-ng/syslog-ng.conf &gt;/etc/syslog-ng/syslog-ng.conf.tmp &amp;&amp; mv /etc/syslog-ng/syslog-ng.conf.tmp /etc/syslog-ng/syslog-ng.conf&#10;exit $?"/>
+          </Args>
+        </Cmd>
+      </Cmds>
+    </Patch>
+  </Patches>
+  <PublishDate>2017-04-27T00:00:00.0000000+00:00</PublishDate>
+  <Title>Ensure syslog-ng default file permissions configured</Title>
+  <Description>It is important to ensure that log files exist and have the correct permissions to ensure that sensitive syslog-ng data is archived and protected</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Category>Logging and Auditing</Category>
+</Vulnerability>

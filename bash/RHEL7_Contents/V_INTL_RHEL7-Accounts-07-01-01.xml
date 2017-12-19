@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Accounts-07-01-01" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Set Password Expiration Days  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Set Password Expiration Days  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0 
+REASON="Password Expiration Days is Not Set to less than or equal to 90 days." 
+EXPECT="Set Password Expiration Days to less than or equal to 90 days." 
+users=""
+expiration=$(awk '/^PASS_MAX_DAYS/{t=$2} END{print t}' /etc/login.defs)
+for u in $(awk -F: '$7 ~ /bash|csh|tcsh|\/sh[^a-zA-Z]/ {print $1}' /etc/passwd);do
+  max=$(chage --list $u |awk -F: '/Maximum/ {print $2}')
+  if [ $max -gt 90 ];then
+    users+=" $u"
+  fi
+done
+if [ -z "$expiration" ];then
+  RV=1
+elif [ $expiration -gt 90 -o -n "$users" ]; then
+  RV=1
+fi
+if [ $RV -eq 1 ]; then 
+	echo $REASON &gt;&amp;1 
+	echo $EXPECT &gt;&amp;2 
+fi 
+exit $RV
+ </DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Set Password Expiration Days  </Title>
+  <Description>The PASS_MAX_DAYS parameter in /etc/login.defs allows an administrator to force passwords to expire once they reach a defined age. It is recommended that the PASS_MAX_DAYS parameter be set to less than or equal to 90 days. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Accounts and Environment</Category>
+</Vulnerability>

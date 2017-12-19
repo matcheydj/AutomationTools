@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-System-06-02-13" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Limit Access via SSH  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Limit Access via SSH  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0 
+REASON="Access is not limited via SSH" 
+EXPECT="Limit Access via SSH" 
+
+n=$(egrep "^AllowUsers|^AllowGroups|^DenyUsers|^DenyGroups" /etc/ssh/sshd_config |sort -u |wc -l)
+if [ $n -ne 4  ]; then
+	RV=1
+fi
+if [ $RV -eq 1 ]; then 
+	echo $REASON &gt;&amp;1 
+	echo $EXPECT &gt;&amp;2 
+fi 
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-11-18T00:00:00.0000000+00:00</PublishDate>
+  <Title>Limit Access via SSH  </Title>
+  <Description>There are several options available to limit which users and group can access the system via SSH. It is recommended that at least of the following options be leveraged:
+ AllowUsers 
+ users to ssh into the system. The list consists of comma separated user names. Numeric userIDs are not recognized with this variable. If a system administrator wants to restrict user access further by only allowing the allowed users to log in from a particular host, the entry can be specified in the form of user@host.  
+ AllowGroups 
+ The AllowGroups variable gives the system administrator the option of allowing specific groups of users to ssh into the system. The list consists of comma separated user names.Numeric groupIDs are not recognized with this variable.  
+ DenyUsers 
+ The DenyUsers variable gives the system administrator the option of denying specific users to ssh into the system. The list consists of comma separated user names. Numeric userIDs are not recognized with this variable. If a system administrator wants to restrict user access further by specifically denying a user's access from a particular host, the entry can be specified in the form of user@host.  
+ DenyGroups 
+ The DenyGroups variable gives the system administrator the option of denying specific groups of users to ssh into the system. The list consists of comma separated group names.  Numeric groupIDs are not recognized with this variable. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>System</Category>
+</Vulnerability>

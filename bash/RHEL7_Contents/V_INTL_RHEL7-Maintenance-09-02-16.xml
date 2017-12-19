@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Maintenance-09-02-16" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Check That Reserved UIDs Are Assigned to System Accounts (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Check That Reserved UIDs Are Assigned to System Accounts (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+Reasons="Reserved UIDs are assigned to non-system accounts."
+Expected="Reserved UIDs are assigned to system accounts."
+
+defUsers="root bin daemon adm lp sync shutdown halt mail operator games ftp nobody dbus polkitd unbound colord usbmuxd avahi avahi-autoipd libstoragemgmt saslauth qemu rpc rpcuser rtkit radvd ntp chrony abrt pulse gdm gnome-initial-setup postfix sshd tcpdump mysql amandabackup arpwatch ident bacula named cyrus dhcpd hsqldb dovecot dovenull radiusd haproxy apache memcached tomcat mailman uucp nscd nslcd tss ldap oprofile postgres quagga mailnull smmsp squid stap-server uuidd"
+duplicate=$(/bin/cat /etc/passwd | /bin/awk -F: '($3 &lt; 1000) { print $1" "$3 }' | while read user uid; do
+  found=0
+  for tUser in ${defUsers}
+  do
+    if [ ${user} = ${tUser} ]; then
+      found=1
+    fi
+  done 
+ if [ $found -eq 0 ]; then
+   echo $user
+ fi
+done)
+duplicates=$(echo $duplicate|tr ' ' ',')
+
+if [ -n "$duplicates" ];then
+  RV=1
+fi
+
+if [ $RV -eq 1 ]; then
+	echo $Reasons${duplicates}. &gt;&amp;1
+	echo $Expected &gt;&amp;2
+fi
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Check That Reserved UIDs Are Assigned to System Accounts</Title>
+  <Description>Description:
+Traditionally, UNIX systems establish "reserved" UIDs (0-999 range) that are intended for system accounts.
+Rationale:
+If a user is assigned a UID that is in the reserved range, even if it is not presently in use, security exposures can arise if a subsequently installed application uses the same UID.
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Maintenance</Category>
+</Vulnerability>

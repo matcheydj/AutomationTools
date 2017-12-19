@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Maintenance-09-02-11" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Check Groups in /etc/passwd  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Check Groups in /etc/passwd  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+Reasons="The following groups are  defined in /etc/passwd but not in /etc/group:" 
+Expected="The groups which are defined in /etc/passwd are also in /etc/group."
+
+for i in $(cut -s -d: -f4 /etc/passwd | sort -u ); do
+grep -q -P "^.*?:x:$i:" /etc/group &amp;&gt;/dev/null
+  if [ $? -ne 0 ]; then
+    RV=1
+    groups=${groups}${groups+","}"$i"
+  fi
+done
+
+if [ $RV -eq 1 ]; then
+	echo $Reasons${groups} &gt;&amp;1
+	echo $Expected &gt;&amp;2
+fi
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Check Groups in /etc/passwd  </Title>
+  <Description>Over time, system administration errors and changes can lead to groups being defined in /etc/passwd but not in /etc/group. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Maintenance</Category>
+</Vulnerability>

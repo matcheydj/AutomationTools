@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-System-06-01-10" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Restrict at Daemon  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Restrict at Daemon  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0 
+REASON="The at daemon is not restricted." 
+EXPECT="Restrict at daemon." 
+rpm -q at &amp;&gt;/dev/null
+if [ $? -ne 0 ];then
+  exit 0
+fi
+stat -L /etc/at.deny &amp;&gt;/dev/null
+if [ $? -eq 0 ];then
+    RV=1
+fi
+stat -L -c "%a %u %g" /etc/at.allow 2&gt;/dev/null  | egrep ".00 0 0" &amp;&gt;/dev/null
+if [ $? -ne 0  ]; then
+	RV=1
+fi
+if [ $RV -eq 1 ]; then 
+	echo $REASON &gt;&amp;1 
+	echo $EXPECT &gt;&amp;2 
+fi 
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Restrict at Daemon  </Title>
+  <Description> The at daemon works with the cron daemon to allow non-privileged users to submit one time only jobs at their convenience.  There are two files that control at: /etc/at.allow and /etc/at.deny. If /etc/at.allow exists, then users listed in the file are the only ones that can create at jobs. If /etc/at.allow does not exist and /etc/at.deny does exist, then any user on the system, with the exception of those listed in /etc/at.deny, are allowed to execute at jobs. An empty /etc/at.deny file allows any user to create at jobs. If neither /etc/at.allow nor /etc/at.deny exist, then only superuser can create at jobs. The commands below remove the /etc/at.deny file and create an empty /etc/at.allow file that can only be read and modified by user and group root. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>System</Category>
+</Vulnerability>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-SpecialServices-03-08" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Disable NFS and RPC  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Disable NFS and RPC  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0 
+serv=""
+
+rpm -q nfs-utils &amp;&gt;/dev/null
+if [ $? -eq 0 ];then
+ for i in `rpm -ql nfs-utils | grep service | egrep "lock|gssd|svcgssd|idmapd"`;do
+  status=$(systemctl is-enabled "$(basename $i)"  2&gt;/dev/null |grep "enabled")
+
+  if [ "${status}" == "enabled" ];then 
+    serv="${serv},$(basename $i)"
+    RV=1 
+  fi 
+ done
+fi
+
+status=$(systemctl is-enabled "rpcbind.service" 2&gt;/dev/null |grep "enabled")
+
+
+if [ "${status}" == "enabled" ];then 
+serv="${serv},rpcbind.service"
+RV=1 
+fi 
+
+servs=$(echo $serv|sed 's/^ *,//')
+reason="The NFS and RPC is not disabled: ${servs}."
+
+if [ $RV -eq 1 ]; then 
+echo "${reason}" &gt;&amp;1 
+echo "The NFS and RPC should be disabled." &gt;&amp;2 
+fi 
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Disable NFS and RPC  </Title>
+  <Description>The Network File System (NFS) is one of the first and most widely distributed file systems 
+in the UNIX environment. It provides the ability for systems to mount file systems of other 
+servers through the network. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Special Services</Category>
+</Vulnerability>

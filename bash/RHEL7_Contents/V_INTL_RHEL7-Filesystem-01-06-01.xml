@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Filesystem-01-06-01" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Restrict Core Dumps  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Restrict Core Dumps  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+reason="Core Dumps are not restricted."
+original_reason=$reason
+hard=$(grep "^\* hard *core * 0 *" /etc/security/limits.conf)
+dumpable=$(sysctl fs.suid_dumpable |cut -d'=' -f2)
+if [ -z "$hard" -o "$dumpable" -ne "0" ]; then
+	RV=1
+fi
+if [ $RV -eq 1 ]; then
+	echo $reason &gt;&amp;1
+	echo "Restrict Core Dumps." &gt;&amp;2
+fi
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Restrict Core Dumps  </Title>
+  <Description>A core dump is the memory of an executable program. It is generally used to determine 
+why a program aborted. It can also be used to glean confidential information from a core 
+file. The system provides the ability to set a soft limit for core dumps, but this can be 
+overridden by the user. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Filesystem and Updates</Category>
+</Vulnerability>

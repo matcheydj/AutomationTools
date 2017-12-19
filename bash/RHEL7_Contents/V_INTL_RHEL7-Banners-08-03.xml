@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Banners-08-03" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Set GNOME Warning Banner  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Set GNOME Warning Banner  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+Reasons="GNOME Warning Banner is not set."
+Expected="Set the GNOME Warning Banner."
+
+if [ ! -e /etc/dconf/db/gdm.d ];then
+  exit 0
+fi
+
+dir="/etc/dconf/db/gdm.d"
+for f in `ls -1 $dir`;do
+   if [ -f ${dir}/$f ];then
+      banner=$(awk -F= '/^\[org\/gnome\/login-screen\]/ {flag=1;while(1){getline;echo $0;
+if(/^banner-message-enable/) {gsub(" *|\t *","",$2);if($2=="true") print $2};
+if(/^banner-message-text/){gsub("[[:space:][:punct:]]*","",$2);if ($2!="")print $2;break}};exit 0 }' ${dir}/$f |wc -l)
+   fi
+done
+if [ ${banner} -lt 2 ];then
+    RV=1
+fi
+
+if [ $RV -eq 1 ]; then
+	echo $Reasons &gt;&amp;1
+	echo $Expected &gt;&amp;2
+fi
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Set GNOME Warning Banner  </Title>
+  <Description>The GNOME Display Manager is used for login session management. See the manual page gdm(1) for more information. The remediation action for this item sets a warning message for GDM users before they log in. 
+
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Warning Banners</Category>
+</Vulnerability>

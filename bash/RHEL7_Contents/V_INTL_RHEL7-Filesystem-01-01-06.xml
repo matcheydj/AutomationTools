@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Filesystem-01-01-06" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Bind Mount the /var/tmp directory to /tmp  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Bind Mount the /var/tmp directory to /tmp  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+reason="Not Bind Mount the /var/tmp directory to /tmp"
+original_reason=$reason
+par=$(grep -v "^#" /etc/fstab|grep "[[:space:]]/tmp[[:space:]]"  )
+par1=$(mount | grep "[[:space:]]/tmp[[:space:]]"|grep /var/tmp)
+npar=$(grep -v "^#" /etc/fstab|grep "[[:space:]]/tmp[[:space:]]"| grep /var/tmp)
+mpar=$(mount | grep "[[:space:]]/tmp[[:space:]]" | grep /var/tmp)
+if [ -n "${par}" ];then
+    
+    if [ -z "$npar" ]; then
+	RV=1
+    fi
+fi
+if [ -n "${par1}" ];then
+    
+    if [ -z "$mpar" ]; then
+	RV=1
+    fi
+fi
+if [ $RV -eq 1 ]; then
+	echo $reason &gt;&amp;1
+	echo "Bind Mount the /var/tmp directory to /tmp." &gt;&amp;2
+fi
+exit $RV
+</DetectScript>
+        <DetectScriptDescription>Not Bind Mount the /var/tmp directory to /tmp.</DetectScriptDescription>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Bind Mount the /var/tmp directory to /tmp  </Title>
+  <Description>The /var/tmp directory is normally a standalone directory in the /var file system. Binding 
+/var/tmp to /tmp establishes an unbreakable link to /tmp that cannot be removed (even by 
+the root user). It also allows /var/tmp to inherit the same mount options that /tmp owns, 
+allowing /var/tmp to be protected in the same /tmp is protected. It will also prevent /var 
+from filling up with temporary files as the contents of /var/tmp will actually reside in the 
+file system containing /tmp. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Filesystem and Updates</Category>
+</Vulnerability>

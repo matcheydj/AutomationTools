@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Accounts-07-04" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Set Default umask for Users to 077 (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Set Default umask for Users  to 077 (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0 
+REASON="The Default umask is Not 077." 
+EXPECT="Set Default umask for Users to 077." 
+CheckUmask () {
+  f=$1
+  if [ -e $f ];then
+  
+  mask=$(awk  '/^[[:space:]]*umask/{mask=$2} END{print mask}' $f)
+    if [ -n "$mask" ];then
+      if [ "$mask" != "077" ];then
+        RV=1
+      fi
+    fi
+  fi
+}
+
+CheckUmask /etc/bashrc
+for m in `ls -1 /etc/profile.d/`;do
+  CheckUmask /etc/profile.d/$m
+done
+
+
+if [ $RV -eq 1 ]; then 
+	echo $REASON &gt;&amp;1 
+	echo $EXPECT &gt;&amp;2 
+fi 
+exit $RV </DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Set Default umask for Users  </Title>
+  <Description>The default umask determines the permissions of files created by users. The user creating the file has the discretion of making their files and directories readable by others via the chmod command. Users who wish to allow their files and directories to be readable by others by default may choose a different default umask by inserting the umask command into the standard shell configuration files (.profile, .cshrc, etc.) in their home directories. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Accounts and Environment</Category>
+</Vulnerability>

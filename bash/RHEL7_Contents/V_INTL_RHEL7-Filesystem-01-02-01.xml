@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Filesystem-01-02-01" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Configure Connection to the RHN RPM Repositories  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Configure Connection to the RHN RPM Repositories  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0 
+REASON="The System is  Not  Configured to Connect to the RHN RPM Repositories." 
+EXPECT="Configure Connection to the RHN RPM Repositories." 
+ERROR1="There was an error communicating with RHN."
+ERROR2="This system is not registered with RHN"
+ERR=$(yum check-update 2&gt;&amp;1| egrep   "${ERROR1}|${ERROR2}" )
+
+if [ -n "${ERR}" ]; then
+	RV=1
+fi
+if [ $RV -eq 1 ]; then 
+	echo $REASON &gt;&amp;1 
+	echo $EXPECT &gt;&amp;2 
+fi 
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Configure Connection to the RHN RPM Repositories  </Title>
+  <Description>Systems need to be registered with the Red Hat Network (RHN) to receive patch updates. 
+This is usually configured during initial installation. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Filesystem and Updates</Category>
+</Vulnerability>

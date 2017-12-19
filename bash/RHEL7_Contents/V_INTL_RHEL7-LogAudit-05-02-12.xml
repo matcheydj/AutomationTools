@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-LogAudit-05-02-12" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 2</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Collect Use of Privileged Commands  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Collect Use of Privileged Commands  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+reason="Use of privileged commands are not collected."
+for dir in `find / -xdev \( -perm -4000 -o -perm -2000 \) -type f`; do
+rev=`grep privileged /etc/audit/audit.rules | grep -E "^[^#][[:space:]]*-a[ ]+[[\bexit\b,\balways\b]|[\balways\b,\bexit\b]]" | grep -E " -F[[:space:]]+path=\"[[:space:]]+${dir}[[:space:]]+\"" |  grep -E " -F[[:space:]]+perm=x" |  grep -E " -F[[:space:]]+auid&gt;=1000" | grep -E " -F[[:space:]]+auid!=4294967295"| grep -E " -k[[:space:]]+privileged" `
+     if [ -z "$rev" ];then
+        RV=1
+     fi  
+done
+
+if [ $RV -eq 1 ]; then
+	echo "${reason}" &gt;&amp;1
+	echo "Collect Use of Privileged Commands." &gt;&amp;2
+fi
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Collect Use of Privileged Commands  </Title>
+  <Description>Monitor privileged programs (those that have the setuid and/or setgid bit set on execution) to determine if unprivileged users are running these commands. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Logging and Auditing</Category>
+</Vulnerability>

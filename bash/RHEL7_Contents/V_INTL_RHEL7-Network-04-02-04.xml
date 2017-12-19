@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Network-04-02-04" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Log Suspicious Packets  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Log Suspicious Packets  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0 
+REASON="Suspicious Packets are not logged." 
+EXPECT="Log Suspicious Packets." 
+
+VALall=$(/sbin/sysctl net.ipv4.conf.all.log_martians |cut -d "=" -f2 )
+VALdefault=$(/sbin/sysctl net.ipv4.conf.default.log_martians |cut -d "=" -f2 )
+
+if [ ${VALall} -ne 1 -o ${VALdefault} -ne 1  ]; then
+	RV=1
+fi
+if [ $RV -eq 1 ]; then 
+	echo $REASON &gt;&amp;1 
+	echo $EXPECT &gt;&amp;2 
+fi 
+exit $RV</DetectScript>
+        <DetectScriptDescription>No separate partition for /tmp.</DetectScriptDescription>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Log Suspicious Packets  </Title>
+  <Description>When enabled, this feature logs packets with un-routable source addresses to the kernel 
+log. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Network and Firewalls</Category>
+</Vulnerability>

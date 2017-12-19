@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Filesystem-01-01-08" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Create Separate Partition for /var/log/audit  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Create Separate Partition for /var/log/audit  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+reason="No separate partition for /var/log/audit"
+original_reason=$reason
+par=$(grep -v "^#" /etc/fstab|grep "[[:space:]]/var/log/audit[[:space:]]")
+if [ "$par" == "" ]; then
+	RV=1
+fi
+if [ $RV -eq 1 ]; then
+	echo $reason &gt;&amp;1
+	echo "Create Separate Partition for /var/log/audit." &gt;&amp;2
+fi
+exit $RV
+</DetectScript>
+        <DetectScriptDescription>No separate partition for /var/log/audit.</DetectScriptDescription>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Create Separate Partition for /var/log/audit  </Title>
+  <Description>The auditing daemon, auditd, stores log data in the /var/log/audit directory. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Filesystem and Updates</Category>
+</Vulnerability>

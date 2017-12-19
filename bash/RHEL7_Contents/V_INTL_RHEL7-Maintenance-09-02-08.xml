@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Maintenance-09-02-08" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Check User Dot File Permissions  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Check User Dot File Permissions  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0
+Reasons="There are group or world-writable user configuration files." 
+Expected="No group or world-writable user configuration files."
+
+for dir in `/bin/cat /etc/passwd | /bin/egrep -v '(root|sync|halt|shutdown)' | /bin/awk -F: '($7 != "/sbin/nologin") { print $6 }'`; do
+  for file in $dir/.[A-Za-z0-9]*; do
+    if [ ! -h "$file" -a -f "$file" ]; then
+      fileperm=`/bin/ls -ld $file | /bin/cut -f1 -d" "`
+      if [ `echo $fileperm | /bin/cut -c6 ` != "-" ]; then
+        RV=1
+	dirs=${dirs}${dirs+","}"${file}"
+	continue
+      fi
+      if [ `echo $fileperm | /bin/cut -c9 ` != "-" ]; then
+        RV=1
+	dirs=${dirs}${dirs+","}"${file}"
+	continue
+      fi
+   fi
+  done
+done
+
+if [ -n "${dirs}" ];then
+  RV=1
+fi
+if [ $RV -eq 1 ]; then
+	echo $Reasons${dirs+"Please check the following directory:${dirs}"} &gt;&amp;1
+	echo $Expected &gt;&amp;2
+fi
+exit $RV
+</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Check User Dot File Permissions  </Title>
+  <Description>While the system administrator can establish secure permissions for users' "dot" files, the users can easily override these. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Maintenance</Category>
+</Vulnerability>

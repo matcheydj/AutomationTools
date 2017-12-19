@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Vulnerability xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Lang="INTL" Vul_ID="RHEL7-Network-04-02-08" Revision="0">
+  <Status>Enabled</Status>
+  <Groups>
+    <Group>Internet Security Benchmarks + Red Hat Enterprise Linux 7 Level 1</Group>
+  </Groups>
+  <DependsOn/>
+  <Patches>
+    <Patch UniqueFilename="*Enable TCP SYN Cookies  (Detect Only)" Hash="" Silent="CRSYes" Reboot="RNo">
+      <Name>Enable TCP SYN Cookies  (Detect Only)</Name>
+      <Advanced>
+        <DetectScript>#!/bin/bash
+RV=0 
+REASON="TCP SYN Cookies is not enabled." 
+EXPECT="Enable TCP SYN Cookies." 
+
+VAL=$(/sbin/sysctl net.ipv4.tcp_syncookies |cut -d "=" -f2 )
+
+if [ ${VAL} -ne 1 ]; then
+	RV=1
+fi
+if [ $RV -eq 1 ]; then 
+	echo $REASON &gt;&amp;1 
+	echo $EXPECT &gt;&amp;2 
+fi 
+exit $RV</DetectScript>
+      </Advanced>
+      <Comments/>
+      <URL/>
+      <State>Enabled</State>
+      <Files/>
+      <RegKeys/>
+      <Products/>
+      <Platforms>
+        <ID>rhel7_x86_64</ID>
+      </Platforms>
+      <CustVars/>
+      <Cmds/>
+    </Patch>
+  </Patches>
+  <PublishDate>2015-07-07T00:00:00.0000000+00:00</PublishDate>
+  <Title>Enable TCP SYN Cookies  </Title>
+  <Description>When tcp_syncookies is set, the kernel will handle TCP SYN packets normally until the 
+half-open connection queue is full, at which time, the SYN cookie functionality kicks in. SYN 
+cookies work by not using the SYN queue at all. Instead, the kernel simply replies to the 
+SYN with a SYN|ACK, but will include a specially crafted TCP sequence number that 
+encodes the source and destination IP address and port number and the time the packet 
+was sent. A legitimate connection would send the ACK packet of the three way handshake 
+with the specially crafted sequence number. This allows the server to verify that it has 
+received a valid response to a SYN cookie and allow the connection, even though there is no 
+corresponding SYN in the queue. 
+ 
+Note: This content will only provide detection of the security threat or vulnerability.  Remediation must be performed manually.</Description>
+  <Severity>3</Severity>
+  <Vendor>LANDESK</Vendor>
+  <MoreInfoURL/>
+  <FAQURL/>
+  <Type>Configuration</Type>
+  <Category>Network and Firewalls</Category>
+</Vulnerability>
