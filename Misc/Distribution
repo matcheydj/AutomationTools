@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<installer-gui-script minSpecVersion="1">
+    <options hostArchitectures="i386" customize="never"/>
+    <title>SU_TITLE</title>
+    <script>
+</script>
+    <volume-check script="VolumeCheck()"/>
+    <installation-check script="InstallationCheck()"/>
+    <script>
+function InstallationCheck(prefix) {
+	if (system.compareVersions(system.version.ProductVersion, '10.7') &lt; 0 || system.compareVersions(system.version.ProductVersion, '10.8') >= 0) {
+		my.result.message = system.localizedStringWithFormat('ERROR_0', '10.7');
+		my.result.type = 'Fatal';
+		return false;
+	}
+	return true;
+}
+function VolumeCheck(prefix) {
+	if (system.env.OS_INSTALL == 1) return true;
+	var hasOS = system.files.fileExistsAtPath(my.target.mountpoint + "/System/Library/CoreServices/SystemVersion.plist");
+	if (!hasOS || system.compareVersions(my.target.systemVersion.ProductVersion, '10.7') &lt; 0 || system.compareVersions(my.target.systemVersion.ProductVersion, '10.8') >= 0) {
+		my.result.message = system.localizedStringWithFormat('ERROR_0', '10.7');
+		my.result.type = 'Fatal';
+		return false;
+	}
+	if (!hasOS || system.compareVersions(my.target.systemVersion.ProductVersion, '10.7.5') &lt; 0) {
+		my.result.message = system.localizedStringWithFormat('ERROR_2', '10.7.5');
+		my.result.type = 'Fatal';
+		return false;
+	}
+	if (!hasOS || system.compareVersions(my.target.systemVersion.ProductVersion, '10.7.5') > 0) {
+		my.result.message = system.localizedStringWithFormat('ERROR_3', '10.7.5');
+		my.result.type = 'Fatal';
+		return false;
+	}
+	my.result.message = system.localizedString('ERROR_4');
+	if (!FileCheck0(my.target.mountpoint)) {
+		my.result.type = 'Fatal';
+		return false;
+	}
+	return true;
+}
+function FileCheck0(prefix) {
+	if (system.files.fileExistsAtPath(prefix + '/System/Library/CoreServices/ServerVersion.plist') == 0) {
+		return true;
+	}
+	return false;
+}
+</script>
+    <license file="License.rtf"/>
+    <readme file="SUDescription.html"/>
+    <choices-outline>
+        <line choice="manual"/>
+    </choices-outline>
+    <choice id="manual" title="SU_TITLE">
+        <pkg-ref id="SecUpd2014-004Lion" auth="Root" onConclusion="RequireRestart">#SecUpd2014-004Lion.pkg</pkg-ref>
+    </choice>
+
+	<pkg-ref id='SecUpd2014-004Lion' installKBytes='233015' version='1.0.0.0.1.1306847324'/>
+
+	<pkg-ref id='SecUpd2014-004Lion' installKBytes='233015' version='1.0.0.0.1.1306847324'/>
+</installer-gui-script>
